@@ -38,3 +38,6 @@ Route::resource('equipos', App\Http\Controllers\API\EquipoAPIController::class)
 
 Route::resource('clientes', App\Http\Controllers\API\ClienteAPIController::class)
     ->except(['create', 'edit']);
+
+Route::resource('servicios', App\Http\Controllers\API\ServicioAPIController::class)
+    ->except(['create', 'edit']);
