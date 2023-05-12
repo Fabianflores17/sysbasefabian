@@ -13,6 +13,7 @@ use App\Http\Controllers\PruebaApiController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TipoEquipoController;
+use  App\Http\Controllers\EquipoController;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes(['verify' => true]);
@@ -67,6 +68,7 @@ Route::group(['prefix' => 'admin','middleware' => ['role:Admin|Superadmin|Develo
     Route::resource('roles', RoleController::class);
 
     Route::resource('permissions', PermissionController::class);
+    Route::resource('equipos', EquipoController::class);
     Route::resource('tipoequipos', TipoEquipoController::class);
 
 
@@ -101,4 +103,3 @@ Route::group(['prefix' => ''], function () {
 
 
 
-Route::resource('equipos', App\Http\Controllers\EquipoController::class);

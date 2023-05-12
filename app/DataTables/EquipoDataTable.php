@@ -18,7 +18,12 @@ class EquipoDataTable extends DataTable
     {
         $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'equipos.datatables_actions');
+        return $dataTable
+        ->addColumn('action', 'equipos.datatables_actions')
+        ->editColumn('tipo_id',function( Equipo $equipo){
+            //-tipo- es la relacion de tipo y Equipo en el modelo
+            return $equipo->tipo->nombre ?? '';
+        });
     }
 
     /**
@@ -66,7 +71,7 @@ class EquipoDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'tipo_id',
+            'tipo_id'=>['title'=> 'Tipo Equipo', 'name' => 'tipo_id', 'data' => 'tipo_id', 'orderable' => 'false'],
             'numero_serie',
             'imei',
             'observaciones'

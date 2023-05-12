@@ -1,7 +1,10 @@
 <!-- Tipo Id Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('tipo_id', 'Tipo Id:') !!}
-    {!! Form::number('tipo_id', null, ['class' => 'form-control', 'required']) !!}
+    {!! Form::Select(
+        'tipo_id',
+    select(\App\Models\TipoEquipo::class, 'nombre','id' , null)
+    , null,['id'=>'tipo_id','class' => ' form-control selectpicker', 'required']) !!}
 </div>
 
 <!-- Numero Serie Field -->
