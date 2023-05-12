@@ -26,11 +26,11 @@ class ServicioDataTable extends DataTable
             return $servicio->usuario->name ?? '';
 
         })
-        ->editColumn('cliente_id', function(Servicio $servicios){
-            return $servicios->cliente->nombres.' '.$servicios->cliente->apellidos ?? '';
+        ->editColumn('cliente_id', function(Servicio $servicio){
+            return $servicio->cliente->nombres.' '.$servicio->cliente->apellidos ?? '';
         })
-        ->editColumn('equipo_id', function(Servicio $servicioe){
-            return $servicioe->equipo->numero_serie ?? '';
+        ->editColumn('equipo_id', function(Servicio $servicio){
+            return $servicio->equipo->numero_serie ?? '';
         });
     }
 
@@ -81,8 +81,7 @@ class ServicioDataTable extends DataTable
         return [
             'usuario_id'=>['title'=> 'Usuario', 'name' => 'usuario_id', 'data' => 'usuario_id', 'orderable' => 'false'],
             'cliente_id'=>['title'=> 'Cliente', 'name' => 'cliente_id', 'data' => 'cliente_id', 'orderable' => 'false'],
-            'equipo_id'=>['title'=> 'Equipo serie', 'name' => 'tipo_id', 'data' => 'tipo_id', 'orderable' => 'false'],
-            'Tipo_id',
+            'equipo_id'=>['title'=> 'Equipo serie', 'name' => 'equipo_id', 'data' => 'equipo_id', 'orderable' => 'false'],
             'problema',
             'solucion',
             'recomendaciones',

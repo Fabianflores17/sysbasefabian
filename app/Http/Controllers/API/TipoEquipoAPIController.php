@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API;
 use App\Http\Requests\API\CreateTipoEquipoAPIRequest;
 use App\Http\Requests\API\UpdateTipoEquipoAPIRequest;
 use App\Models\TipoEquipo;
-use App\Repositories\TipoEquipoRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
@@ -15,26 +14,24 @@ use App\Http\Controllers\AppBaseController;
  */
 class TipoEquipoAPIController extends AppBaseController
 {
-    private TipoEquipoRepository $tipoEquipoRepository;
-
-    public function __construct(TipoEquipoRepository $tipoEquipoRepo)
-    {
-        $this->tipoEquipoRepository = $tipoEquipoRepo;
-    }
-
     /**
      * Display a listing of the TipoEquipos.
      * GET|HEAD /tipo-equipos
      */
     public function index(Request $request): JsonResponse
     {
-        $tipoEquipos = $this->tipoEquipoRepository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
+        $query = TipoEquipo::query();
 
-        return $this->sendResponse($tipoEquipos->toArray(), 'Tipo Equipos retrieved successfully');
+        if ($request->get('skip')) {
+            $query->skip($request->get('skip'));
+        }
+        if ($request->get('limit')) {
+            $query->limit($request->get('limit'));
+        }
+
+        $tipoEquipos = $query->get();
+
+        return $this->sendResponse($tipoEquipos->toArray(), 'Tipo Equipos ');
     }
 
     /**
@@ -45,9 +42,10 @@ class TipoEquipoAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $tipoEquipo = $this->tipoEquipoRepository->create($input);
+        /** @var TipoEquipo $tipoEquipo */
+        $tipoEquipo = TipoEquipo::create($input);
 
-        return $this->sendResponse($tipoEquipo->toArray(), 'Tipo Equipo saved successfully');
+        return $this->sendResponse($tipoEquipo->toArray(), 'Tipo Equipo guardado');
     }
 
     /**
@@ -57,13 +55,13 @@ class TipoEquipoAPIController extends AppBaseController
     public function show($id): JsonResponse
     {
         /** @var TipoEquipo $tipoEquipo */
-        $tipoEquipo = $this->tipoEquipoRepository->find($id);
+        $tipoEquipo = TipoEquipo::find($id);
 
         if (empty($tipoEquipo)) {
-            return $this->sendError('Tipo Equipo not found');
+            return $this->sendError('Tipo Equipo no encontrado');
         }
 
-        return $this->sendResponse($tipoEquipo->toArray(), 'Tipo Equipo retrieved successfully');
+        return $this->sendResponse($tipoEquipo->toArray(), 'Tipo Equipo ');
     }
 
     /**
@@ -72,18 +70,17 @@ class TipoEquipoAPIController extends AppBaseController
      */
     public function update($id, UpdateTipoEquipoAPIRequest $request): JsonResponse
     {
-        $input = $request->all();
-
         /** @var TipoEquipo $tipoEquipo */
-        $tipoEquipo = $this->tipoEquipoRepository->find($id);
+        $tipoEquipo = TipoEquipo::find($id);
 
         if (empty($tipoEquipo)) {
-            return $this->sendError('Tipo Equipo not found');
+            return $this->sendError('Tipo Equipo no encontrado');
         }
 
-        $tipoEquipo = $this->tipoEquipoRepository->update($input, $id);
+        $tipoEquipo->fill($request->all());
+        $tipoEquipo->save();
 
-        return $this->sendResponse($tipoEquipo->toArray(), 'TipoEquipo updated successfully');
+        return $this->sendResponse($tipoEquipo->toArray(), 'TipoEquipo actualizado');
     }
 
     /**
@@ -95,14 +92,14 @@ class TipoEquipoAPIController extends AppBaseController
     public function destroy($id): JsonResponse
     {
         /** @var TipoEquipo $tipoEquipo */
-        $tipoEquipo = $this->tipoEquipoRepository->find($id);
+        $tipoEquipo = TipoEquipo::find($id);
 
         if (empty($tipoEquipo)) {
-            return $this->sendError('Tipo Equipo not found');
+            return $this->sendError('Tipo Equipo no encontrado');
         }
 
         $tipoEquipo->delete();
 
-        return $this->sendSuccess('Tipo Equipo deleted successfully');
+        return $this->sendSuccess('Tipo Equipo eliminado');
     }
 }

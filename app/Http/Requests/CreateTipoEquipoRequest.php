@@ -26,4 +26,9 @@ class CreateTipoEquipoRequest extends FormRequest
     {
         return TipoEquipo::$rules;
     }
+
+    public function messages()
+    {
+        return TipoEquipo::$messages;
+    }
 }

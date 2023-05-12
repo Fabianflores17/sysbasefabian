@@ -3,9 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+ use Illuminate\Database\Eloquent\SoftDeletes;
+ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class TipoEquipo extends Model
 {
+
+    use SoftDeletes;
+    use HasFactory;
+
     public $table = 'soporte_equipo_tipos';
 
     public $fillable = [
@@ -19,11 +25,15 @@ class TipoEquipo extends Model
     ];
 
     public static $rules = [
-        'nombre' => 'required|string',
+        'nombre' => 'required|string|max:255',
         'activo' => 'nullable|string',
         'created_at' => 'nullable',
         'updated_at' => 'nullable',
         'deleted_at' => 'nullable'
+    ];
+
+    public static $messages = [
+
     ];
 
     public function soporteEquipos(): \Illuminate\Database\Eloquent\Relations\HasMany

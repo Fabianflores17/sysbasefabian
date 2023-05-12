@@ -106,3 +106,4 @@ Route::group(['prefix' => ''], function () {
 
 Route::resource('clientes', App\Http\Controllers\ClienteController::class);
 Route::resource('servicios', App\Http\Controllers\ServicioController::class);
+Route::resource('tipoEquipos', App\Http\Controllers\TipoEquipoController::class);

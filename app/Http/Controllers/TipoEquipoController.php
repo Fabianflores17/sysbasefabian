@@ -6,26 +6,25 @@ use App\DataTables\TipoEquipoDataTable;
 use App\Http\Requests\CreateTipoEquipoRequest;
 use App\Http\Requests\UpdateTipoEquipoRequest;
 use App\Http\Controllers\AppBaseController;
-use App\Repositories\TipoEquipoRepository;
+use App\Models\TipoEquipo;
 use Illuminate\Http\Request;
-use Flash;
 
 class TipoEquipoController extends AppBaseController
 {
-    /** @var TipoEquipoRepository $tipoEquipoRepository*/
-    private $tipoEquipoRepository;
 
-    public function __construct(TipoEquipoRepository $tipoEquipoRepo)
+    public function __construct()
     {
-        $this->tipoEquipoRepository = $tipoEquipoRepo;
+        $this->middleware('permission:Ver Tipo Equipos')->only('show');
+        $this->middleware('permission:Crear Tipo Equipos')->only(['create','store']);
+        $this->middleware('permission:Editar Tipo Equipos')->only(['edit','update']);
+        $this->middleware('permission:Eliminar Tipo Equipos')->only('destroy');
     }
-
     /**
      * Display a listing of the TipoEquipo.
      */
     public function index(TipoEquipoDataTable $tipoEquipoDataTable)
     {
-    return $tipoEquipoDataTable->render('tipoequipos.index');
+    return $tipoEquipoDataTable->render('tipo_equipos.index');
     }
 
 
@@ -34,7 +33,7 @@ class TipoEquipoController extends AppBaseController
      */
     public function create()
     {
-        return view('tipoequipos.create');
+        return view('tipo_equipos.create');
     }
 
     /**
@@ -44,11 +43,12 @@ class TipoEquipoController extends AppBaseController
     {
         $input = $request->all();
 
-        $tipoEquipo = $this->tipoEquipoRepository->create($input);
+        /** @var TipoEquipo $tipoEquipo */
+        $tipoEquipo = TipoEquipo::create($input);
 
-        Flash::success('Tipo Equipo saved successfully.');
+        flash()->success('Tipo Equipo guardado.');
 
-        return redirect(route('tipoequipos.index'));
+        return redirect(route('tipoEquipos.index'));
     }
 
     /**
@@ -56,15 +56,16 @@ class TipoEquipoController extends AppBaseController
      */
     public function show($id)
     {
-        $tipoEquipo = $this->tipoEquipoRepository->find($id);
+        /** @var TipoEquipo $tipoEquipo */
+        $tipoEquipo = TipoEquipo::find($id);
 
         if (empty($tipoEquipo)) {
-            Flash::error('Tipo Equipo not found');
+            flash()->error('Tipo Equipo no encontrado');
 
-            return redirect(route('tipoequipos.index'));
+            return redirect(route('tipoEquipos.index'));
         }
 
-        return view('tipoequipos.show')->with('tipoEquipo', $tipoEquipo);
+        return view('tipo_equipos.show')->with('tipoEquipo', $tipoEquipo);
     }
 
     /**
@@ -72,15 +73,16 @@ class TipoEquipoController extends AppBaseController
      */
     public function edit($id)
     {
-        $tipoEquipo = $this->tipoEquipoRepository->find($id);
+        /** @var TipoEquipo $tipoEquipo */
+        $tipoEquipo = TipoEquipo::find($id);
 
         if (empty($tipoEquipo)) {
-            Flash::error('Tipo Equipo not found');
+            flash()->error('Tipo Equipo no encontrado');
 
-            return redirect(route('tipoequipos.index'));
+            return redirect(route('tipoEquipos.index'));
         }
 
-        return view('tipoequipos.edit')->with('tipoEquipo', $tipoEquipo);
+        return view('tipo_equipos.edit')->with('tipoEquipo', $tipoEquipo);
     }
 
     /**
@@ -88,19 +90,21 @@ class TipoEquipoController extends AppBaseController
      */
     public function update($id, UpdateTipoEquipoRequest $request)
     {
-        $tipoEquipo = $this->tipoEquipoRepository->find($id);
+        /** @var TipoEquipo $tipoEquipo */
+        $tipoEquipo = TipoEquipo::find($id);
 
         if (empty($tipoEquipo)) {
-            Flash::error('Tipo Equipo not found');
+            flash()->error('Tipo Equipo no encontrado');
 
-            return redirect(route('tipoequipos.index'));
+            return redirect(route('tipoEquipos.index'));
         }
 
-        $tipoEquipo = $this->tipoEquipoRepository->update($request->all(), $id);
+        $tipoEquipo->fill($request->all());
+        $tipoEquipo->save();
 
-        Flash::success('Tipo Equipo updated successfully.');
+        flash()->success('Tipo Equipo actualizado.');
 
-        return redirect(route('tipoequipos.index'));
+        return redirect(route('tipoEquipos.index'));
     }
 
     /**
@@ -110,18 +114,19 @@ class TipoEquipoController extends AppBaseController
      */
     public function destroy($id)
     {
-        $tipoEquipo = $this->tipoEquipoRepository->find($id);
+        /** @var TipoEquipo $tipoEquipo */
+        $tipoEquipo = TipoEquipo::find($id);
 
         if (empty($tipoEquipo)) {
-            Flash::error('Tipo Equipo not found');
+            flash()->error('Tipo Equipo no encontrado');
 
-            return redirect(route('tipoequipos.index'));
+            return redirect(route('tipoEquipos.index'));
         }
 
-        $this->tipoEquipoRepository->delete($id);
+        $tipoEquipo->delete();
 
-        Flash::success('Tipo Equipo deleted successfully.');
+        flash()->success('Tipo Equipo eliminado.');
 
-        return redirect(route('tipoequipos.index'));
+        return redirect(route('tipoEquipos.index'));
     }
 }
