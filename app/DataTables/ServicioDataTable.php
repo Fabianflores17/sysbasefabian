@@ -3,8 +3,10 @@
 namespace App\DataTables;
 
 use App\Models\Servicio;
+use App\Models\Equipo;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
+
 
 class ServicioDataTable extends DataTable
 {
@@ -79,7 +81,8 @@ class ServicioDataTable extends DataTable
         return [
             'usuario_id'=>['title'=> 'Usuario', 'name' => 'usuario_id', 'data' => 'usuario_id', 'orderable' => 'false'],
             'cliente_id'=>['title'=> 'Cliente', 'name' => 'cliente_id', 'data' => 'cliente_id', 'orderable' => 'false'],
-            'equipo_id'=>['title'=> 'Equipo serie', 'name' => 'equipo_id', 'data' => 'equipo_id', 'orderable' => 'false'],
+            'equipo_id'=>['title'=> 'Equipo serie', 'name' => 'tipo_id', 'data' => 'tipo_id', 'orderable' => 'false'],
+            'Tipo_id',
             'problema',
             'solucion',
             'recomendaciones',

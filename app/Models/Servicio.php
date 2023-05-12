@@ -61,4 +61,6 @@ class Servicio extends Model
     {
         return $this->belongsTo(\App\Models\User::class, 'usuario_id');
     }
+
+
 }

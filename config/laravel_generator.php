@@ -130,6 +130,7 @@ return [
 
     'options' => [
 
+<<<<<<< HEAD
         'soft_delete' => false,
 
         'save_schema_file' => true,
@@ -149,6 +150,29 @@ return [
         'tests' => false, // generate test cases for your APIs
 
         'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module
+=======
+        'soft_delete' => true,
+
+        'save_schema_file' => false,
+
+        'localized' => false,
+
+        'repository_pattern' => false,
+
+        'resources' => false,
+
+        'factory' => true,
+
+        'seeder' => true,
+
+        'swagger' => false, // generate swagger for your APIs
+
+        'menu' => false,
+
+        'tests' => false, // generate test cases for your APIs
+
+        'excluded_fields' => [], // Array of columns that doesn't required while creating module
+>>>>>>> ed938d6d8037ff7c95c883cc6d0af1ec39c392ce
     ],
 
     /*
