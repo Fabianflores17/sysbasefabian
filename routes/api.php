@@ -27,3 +27,11 @@ Route::group(['as'=>'api.'], function () {
 
 });
 
+
+
+Route::resource('tipoequipos', App\Http\Controllers\API\TipoEquipoAPIController::class)
+    ->except(['create', 'edit']);
+
+
+Route::resource('equipos', App\Http\Controllers\API\EquipoAPIController::class)
+    ->except(['create', 'edit']);
