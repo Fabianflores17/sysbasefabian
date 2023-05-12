@@ -82,7 +82,6 @@ class ServicioDataTable extends DataTable
             'usuario_id'=>['title'=> 'Usuario', 'name' => 'usuario_id', 'data' => 'usuario_id', 'orderable' => 'false'],
             'cliente_id'=>['title'=> 'Cliente', 'name' => 'cliente_id', 'data' => 'cliente_id', 'orderable' => 'false'],
             'equipo_id'=>['title'=> 'Equipo serie', 'name' => 'tipo_id', 'data' => 'tipo_id', 'orderable' => 'false'],
-            'Tipo_id',
             'problema',
             'solucion',
             'recomendaciones',
