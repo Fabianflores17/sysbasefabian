@@ -38,6 +38,6 @@ class TipoEquipo extends Model
 
     public function soporteEquipos(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(\App\Models\SoporteEquipo::class, 'tipo_id');
+        return $this->hasMany(\App\Models\Equipo::class, 'tipo_id');
     }
 }

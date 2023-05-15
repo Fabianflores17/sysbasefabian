@@ -3,7 +3,6 @@
 namespace App\DataTables;
 
 use App\Models\Servicio;
-use App\Models\Equipo;
 use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\EloquentDataTable;
 
@@ -29,8 +28,12 @@ class ServicioDataTable extends DataTable
         ->editColumn('cliente_id', function(Servicio $servicio){
             return $servicio->cliente->nombres.' '.$servicio->cliente->apellidos ?? '';
         })
-        ->editColumn('equipo_id', function(Servicio $servicio){
-            return $servicio->equipo->numero_serie ?? '';
+        ->editColumn('tipo_id', function(Servicio $equipo){
+            return $equipo->Equipo->tipo->nombre ?? '';
+        })
+        ->editColumn('equipo_id', function(Servicio $equipo){
+            return $equipo->equipo->numero_serie ?? '';
+            @dd($equipo);
         });
     }
 
@@ -42,7 +45,15 @@ class ServicioDataTable extends DataTable
      */
     public function query(Servicio $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()
+        ->with(['usuario:id,name'])
+        ->with(['cliente:id,nombres'])
+        ->with(['equipo:id,numero_serie'])
+        //->with(['equipo:id,numero_serie'])
+
+       // ->with('usuario.unidad:id,nombre')
+        //->with('usuario.puesto:id,nombre')
+        ;
     }
 
     /**
@@ -79,9 +90,10 @@ class ServicioDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'usuario_id'=>['title'=> 'Usuario', 'name' => 'usuario_id', 'data' => 'usuario_id', 'orderable' => 'false'],
-            'cliente_id'=>['title'=> 'Cliente', 'name' => 'cliente_id', 'data' => 'cliente_id', 'orderable' => 'false'],
-            'equipo_id'=>['title'=> 'Equipo serie', 'name' => 'equipo_id', 'data' => 'equipo_id', 'orderable' => 'false'],
+            'usuario_id'=>['title'=> 'Usuario', 'name' => 'usuario.name', 'data' => 'usuario.name', 'orderable' => 'false'],
+            'cliente_id'=>['title'=> 'Cliente', 'name' => 'cliente.nombres', 'data' => 'cliente.nombres', 'orderable' => 'false'],
+            'equipo_id'=>['title'=> 'Equipo', 'name' => 'equipo.numero_serie', 'data' => 'equipo.numero_serie', 'orderable' => 'false'],
+            //'tipo_id'=>['title'=> 'numero serie', 'name' => 'equipo_id', 'data' => 'tipo_id', 'orderable' => 'false'],
             'problema',
             'solucion',
             'recomendaciones',

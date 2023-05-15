@@ -34,7 +34,8 @@ class EquipoDataTable extends DataTable
      */
     public function query(Equipo $model)
     {
-        return $model->newQuery();
+      // return $model->newQuery();
+       return $model->newQuery()->with(['tipo:id,nombre']);
     }
 
     /**
@@ -71,7 +72,7 @@ class EquipoDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'tipo_id'=>['title'=> 'Tipo Equipo', 'name' => 'tipo_id', 'data' => 'tipo_id', 'orderable' => 'false'],
+            'tipo_id'=>['title'=> 'Tipo Equipo', 'name' => 'tipo.nombre', 'data' => 'tipo.nombre', 'orderable' => 'false'],
             'numero_serie',
             'imei',
             'observaciones'
