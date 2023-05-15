@@ -90,16 +90,10 @@ class ServicioDataTable extends DataTable
     protected function getColumns()
     {
         return [
-<<<<<<< HEAD
             'usuario_id'=>['title'=> 'Usuario', 'name' => 'usuario.name', 'data' => 'usuario.name', 'orderable' => 'false'],
             'cliente_id'=>['title'=> 'Cliente', 'name' => 'cliente.nombres', 'data' => 'cliente.nombres', 'orderable' => 'false'],
             'equipo_id'=>['title'=> 'Equipo', 'name' => 'equipo.numero_serie', 'data' => 'equipo.numero_serie', 'orderable' => 'false'],
             //'tipo_id'=>['title'=> 'numero serie', 'name' => 'equipo_id', 'data' => 'tipo_id', 'orderable' => 'false'],
-=======
-            'usuario_id'=>['title'=> 'Usuario', 'name' => 'usuario_id', 'data' => 'usuario_id', 'orderable' => 'false'],
-            'cliente_id'=>['title'=> 'Cliente', 'name' => 'cliente_id', 'data' => 'cliente_id', 'orderable' => 'false'],
-            'equipo_id'=>['title'=> 'Equipo serie', 'name' => 'tipo_id', 'data' => 'tipo_id', 'orderable' => 'false'],
->>>>>>> b526e544af297db14ab8151e14713aaf88320143
             'problema',
             'solucion',
             'recomendaciones',
