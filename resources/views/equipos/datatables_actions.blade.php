@@ -1,16 +1,24 @@
-{!! Form::open(['route' => ['equipos.destroy', $id], 'method' => 'delete']) !!}
-<div class='btn-group'>
-    <a href="{{ route('equipos.show', $id) }}" class='btn btn-default btn-xs'>
+@can('Ver Equipos')
+    <a href="{{ route('equipos.show', $id) }}" data-toggle="tooltip" title="Ver" class='btn btn-icon btn-flat-secondary rounded-circle'>
         <i class="fa fa-eye"></i>
     </a>
-    <a href="{{ route('equipos.edit', $id) }}" class='btn btn-default btn-xs'>
+@endcan
+
+@can('Editar Equipos')
+    <a href="{{ route('equipos.edit', $id) }}" data-toggle="tooltip" title="Editar" class='btn btn-icon btn-flat-info rounded-circle'>
         <i class="fa fa-edit"></i>
     </a>
-    {!! Form::button('<i class="fa fa-trash"></i>', [
-        'type' => 'submit',
-        'class' => 'btn btn-danger btn-xs',
-        'onclick' => 'return confirm("'.__('Desea eliminar el registro de Equipo').'")'
+@endcan
 
-    ]) !!}
-</div>
-{!! Form::close() !!}
+@can('Eliminar Equipos')
+    <a href="#" onclick="deleteItemDt(this)" data-id="{{ $id }}" data-toggle="tooltip" title="Eliminar" class='btn btn-icon btn-flat-danger rounded-circle'>
+        <i class="fa fa-trash-alt"></i>
+    </a>
+
+
+    <form action="{{ route('equipos.destroy', $id) }}" method="POST" id="delete-form{{ $id }}">
+        @method('DELETE')
+        @csrf
+    </form>
+@endcan
+

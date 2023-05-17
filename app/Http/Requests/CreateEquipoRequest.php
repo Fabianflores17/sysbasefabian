@@ -26,4 +26,9 @@ class CreateEquipoRequest extends FormRequest
     {
         return Equipo::$rules;
     }
+
+    public function messages()
+    {
+        return Equipo::$messages;
+    }
 }

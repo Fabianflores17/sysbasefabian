@@ -28,4 +28,9 @@ class UpdateEquipoRequest extends FormRequest
         
         return $rules;
     }
+
+    public function messages()
+    {
+        return Equipo::$messages;
+    }
 }

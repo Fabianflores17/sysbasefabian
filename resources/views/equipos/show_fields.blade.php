@@ -1,7 +1,7 @@
 <!-- Tipo Id Field -->
 <div class="col-sm-12">
     {!! Form::label('tipo_id', 'Tipo Id:') !!}
-    <p>{{ $equipo->tipo->nombre }}</p>
+    <p>{{ $equipo->tipo_id }}</p>
 </div>
 
 <!-- Numero Serie Field -->

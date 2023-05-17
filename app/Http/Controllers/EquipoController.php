@@ -6,21 +6,19 @@ use App\DataTables\EquipoDataTable;
 use App\Http\Requests\CreateEquipoRequest;
 use App\Http\Requests\UpdateEquipoRequest;
 use App\Http\Controllers\AppBaseController;
-use App\Repositories\EquipoRepository;
-use Illuminate\Http\Request;
 use App\Models\Equipo;
-use Flash;
+use Illuminate\Http\Request;
 
 class EquipoController extends AppBaseController
 {
-    /** @var EquipoRepository $equipoRepository*/
-    private $equipoRepository;
 
-    public function __construct(EquipoRepository $equipoRepo)
+    public function __construct()
     {
-        $this->equipoRepository = $equipoRepo;
+        $this->middleware('permission:Ver Equipos')->only('show');
+        $this->middleware('permission:Crear Equipos')->only(['create','store']);
+        $this->middleware('permission:Editar Equipos')->only(['edit','update']);
+        $this->middleware('permission:Eliminar Equipos')->only('destroy');
     }
-
     /**
      * Display a listing of the Equipo.
      */
@@ -45,9 +43,10 @@ class EquipoController extends AppBaseController
     {
         $input = $request->all();
 
-        $equipo = $this->equipoRepository->create($input);
+        /** @var Equipo $equipo */
+        $equipo = Equipo::create($input);
 
-        Flash::success('Equipo saved successfully.');
+        flash()->success('Equipo guardado.');
 
         return redirect(route('equipos.index'));
     }
@@ -57,10 +56,11 @@ class EquipoController extends AppBaseController
      */
     public function show($id)
     {
-        $equipo = $this->equipoRepository->find($id);
+        /** @var Equipo $equipo */
+        $equipo = Equipo::find($id);
 
         if (empty($equipo)) {
-            Flash::error('Equipo not found');
+            flash()->error('Equipo no encontrado');
 
             return redirect(route('equipos.index'));
         }
@@ -73,10 +73,11 @@ class EquipoController extends AppBaseController
      */
     public function edit($id)
     {
-        $equipo = $this->equipoRepository->find($id);
+        /** @var Equipo $equipo */
+        $equipo = Equipo::find($id);
 
         if (empty($equipo)) {
-            Flash::error('Equipo not found');
+            flash()->error('Equipo no encontrado');
 
             return redirect(route('equipos.index'));
         }
@@ -89,17 +90,19 @@ class EquipoController extends AppBaseController
      */
     public function update($id, UpdateEquipoRequest $request)
     {
-        $equipo = $this->equipoRepository->find($id);
+        /** @var Equipo $equipo */
+        $equipo = Equipo::find($id);
 
         if (empty($equipo)) {
-            Flash::error('Equipo not found');
+            flash()->error('Equipo no encontrado');
 
             return redirect(route('equipos.index'));
         }
 
-        $equipo = $this->equipoRepository->update($request->all(), $id);
+        $equipo->fill($request->all());
+        $equipo->save();
 
-        Flash::success('Equipo updated successfully.');
+        flash()->success('Equipo actualizado.');
 
         return redirect(route('equipos.index'));
     }
@@ -109,39 +112,21 @@ class EquipoController extends AppBaseController
      *
      * @throws \Exception
      */
-//     public function destroy($id)
-//     {
-//         $equipo = $this->equipoRepository->find($id);
+    public function destroy($id)
+    {
+        /** @var Equipo $equipo */
+        $equipo = Equipo::find($id);
 
-//         if (empty($equipo)) {
-//             Flash::error('Equipo not found');
+        if (empty($equipo)) {
+            flash()->error('Equipo no encontrado');
 
-//             return redirect(route('equipos.index'));
-//         }
+            return redirect(route('equipos.index'));
+        }
 
-//         $this->equipoRepository->delete($id);
+        $equipo->delete();
 
-//         Flash::success('Equipo deleted successfully.');
+        flash()->success('Equipo eliminado.');
 
-//         return redirect(route('equipos.index'));
-//     }
-
-public function destroy($id)
-{
-/** @var equipo $equipo */
-$equipo = Equipo::find($id);
-
-if (empty($equipo)) {
-flash()->error('Equipo no encontrado');
-
-return redirect(route('equipos.index'));
+        return redirect(route('equipos.index'));
+    }
 }
-
-$equipo->delete();
-
-flash()->success('Equipo eliminado.');
-
-return redirect(route('equipos.index'));
-}
-}
-

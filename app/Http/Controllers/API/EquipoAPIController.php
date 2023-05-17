@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API;
 use App\Http\Requests\API\CreateEquipoAPIRequest;
 use App\Http\Requests\API\UpdateEquipoAPIRequest;
 use App\Models\Equipo;
-use App\Repositories\EquipoRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
@@ -15,26 +14,24 @@ use App\Http\Controllers\AppBaseController;
  */
 class EquipoAPIController extends AppBaseController
 {
-    private EquipoRepository $equipoRepository;
-
-    public function __construct(EquipoRepository $equipoRepo)
-    {
-        $this->equipoRepository = $equipoRepo;
-    }
-
     /**
      * Display a listing of the Equipos.
      * GET|HEAD /equipos
      */
     public function index(Request $request): JsonResponse
     {
-        $equipos = $this->equipoRepository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
+        $query = Equipo::query();
 
-        return $this->sendResponse($equipos->toArray(), 'Equipos retrieved successfully');
+        if ($request->get('skip')) {
+            $query->skip($request->get('skip'));
+        }
+        if ($request->get('limit')) {
+            $query->limit($request->get('limit'));
+        }
+
+        $equipos = $query->get();
+
+        return $this->sendResponse($equipos->toArray(), 'Equipos ');
     }
 
     /**
@@ -45,9 +42,10 @@ class EquipoAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $equipo = $this->equipoRepository->create($input);
+        /** @var Equipo $equipo */
+        $equipo = Equipo::create($input);
 
-        return $this->sendResponse($equipo->toArray(), 'Equipo saved successfully');
+        return $this->sendResponse($equipo->toArray(), 'Equipo guardado');
     }
 
     /**
@@ -57,13 +55,13 @@ class EquipoAPIController extends AppBaseController
     public function show($id): JsonResponse
     {
         /** @var Equipo $equipo */
-        $equipo = $this->equipoRepository->find($id);
+        $equipo = Equipo::find($id);
 
         if (empty($equipo)) {
-            return $this->sendError('Equipo not found');
+            return $this->sendError('Equipo no encontrado');
         }
 
-        return $this->sendResponse($equipo->toArray(), 'Equipo retrieved successfully');
+        return $this->sendResponse($equipo->toArray(), 'Equipo ');
     }
 
     /**
@@ -72,18 +70,17 @@ class EquipoAPIController extends AppBaseController
      */
     public function update($id, UpdateEquipoAPIRequest $request): JsonResponse
     {
-        $input = $request->all();
-
         /** @var Equipo $equipo */
-        $equipo = $this->equipoRepository->find($id);
+        $equipo = Equipo::find($id);
 
         if (empty($equipo)) {
-            return $this->sendError('Equipo not found');
+            return $this->sendError('Equipo no encontrado');
         }
 
-        $equipo = $this->equipoRepository->update($input, $id);
+        $equipo->fill($request->all());
+        $equipo->save();
 
-        return $this->sendResponse($equipo->toArray(), 'Equipo updated successfully');
+        return $this->sendResponse($equipo->toArray(), 'Equipo actualizado');
     }
 
     /**
@@ -95,14 +92,14 @@ class EquipoAPIController extends AppBaseController
     public function destroy($id): JsonResponse
     {
         /** @var Equipo $equipo */
-        $equipo = $this->equipoRepository->find($id);
+        $equipo = Equipo::find($id);
 
         if (empty($equipo)) {
-            return $this->sendError('Equipo not found');
+            return $this->sendError('Equipo no encontrado');
         }
 
         $equipo->delete();
 
-        return $this->sendSuccess('Equipo deleted successfully');
+        return $this->sendSuccess('Equipo eliminado');
     }
 }
