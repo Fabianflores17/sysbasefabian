@@ -6,20 +6,19 @@ use App\DataTables\ServicioDataTable;
 use App\Http\Requests\CreateServicioRequest;
 use App\Http\Requests\UpdateServicioRequest;
 use App\Http\Controllers\AppBaseController;
-use App\Repositories\ServicioRepository;
+use App\Models\Servicio;
 use Illuminate\Http\Request;
-use Flash;
 
 class ServicioController extends AppBaseController
 {
-    /** @var ServicioRepository $servicioRepository*/
-    private $servicioRepository;
 
-    public function __construct(ServicioRepository $servicioRepo)
+    public function __construct()
     {
-        $this->servicioRepository = $servicioRepo;
+        $this->middleware('permission:Ver Servicios')->only('show');
+        $this->middleware('permission:Crear Servicios')->only(['create','store']);
+        $this->middleware('permission:Editar Servicios')->only(['edit','update']);
+        $this->middleware('permission:Eliminar Servicios')->only('destroy');
     }
-
     /**
      * Display a listing of the Servicio.
      */
@@ -44,9 +43,10 @@ class ServicioController extends AppBaseController
     {
         $input = $request->all();
 
-        $servicio = $this->servicioRepository->create($input);
+        /** @var Servicio $servicio */
+        $servicio = Servicio::create($input);
 
-        Flash::success('Servicio saved successfully.');
+        flash()->success('Servicio guardado.');
 
         return redirect(route('servicios.index'));
     }
@@ -56,10 +56,11 @@ class ServicioController extends AppBaseController
      */
     public function show($id)
     {
-        $servicio = $this->servicioRepository->find($id);
+        /** @var Servicio $servicio */
+        $servicio = Servicio::find($id);
 
         if (empty($servicio)) {
-            Flash::error('Servicio not found');
+            flash()->error('Servicio no encontrado');
 
             return redirect(route('servicios.index'));
         }
@@ -72,10 +73,11 @@ class ServicioController extends AppBaseController
      */
     public function edit($id)
     {
-        $servicio = $this->servicioRepository->find($id);
+        /** @var Servicio $servicio */
+        $servicio = Servicio::find($id);
 
         if (empty($servicio)) {
-            Flash::error('Servicio not found');
+            flash()->error('Servicio no encontrado');
 
             return redirect(route('servicios.index'));
         }
@@ -88,17 +90,19 @@ class ServicioController extends AppBaseController
      */
     public function update($id, UpdateServicioRequest $request)
     {
-        $servicio = $this->servicioRepository->find($id);
+        /** @var Servicio $servicio */
+        $servicio = Servicio::find($id);
 
         if (empty($servicio)) {
-            Flash::error('Servicio not found');
+            flash()->error('Servicio no encontrado');
 
             return redirect(route('servicios.index'));
         }
 
-        $servicio = $this->servicioRepository->update($request->all(), $id);
+        $servicio->fill($request->all());
+        $servicio->save();
 
-        Flash::success('Servicio updated successfully.');
+        flash()->success('Servicio actualizado.');
 
         return redirect(route('servicios.index'));
     }
@@ -110,17 +114,18 @@ class ServicioController extends AppBaseController
      */
     public function destroy($id)
     {
-        $servicio = $this->servicioRepository->find($id);
+        /** @var Servicio $servicio */
+        $servicio = Servicio::find($id);
 
         if (empty($servicio)) {
-            Flash::error('Servicio not found');
+            flash()->error('Servicio no encontrado');
 
             return redirect(route('servicios.index'));
         }
 
-        $this->servicioRepository->delete($id);
+        $servicio->delete();
 
-        Flash::success('Servicio deleted successfully.');
+        flash()->success('Servicio eliminado.');
 
         return redirect(route('servicios.index'));
     }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API;
 use App\Http\Requests\API\CreateServicioAPIRequest;
 use App\Http\Requests\API\UpdateServicioAPIRequest;
 use App\Models\Servicio;
-use App\Repositories\ServicioRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
@@ -15,26 +14,24 @@ use App\Http\Controllers\AppBaseController;
  */
 class ServicioAPIController extends AppBaseController
 {
-    private ServicioRepository $servicioRepository;
-
-    public function __construct(ServicioRepository $servicioRepo)
-    {
-        $this->servicioRepository = $servicioRepo;
-    }
-
     /**
      * Display a listing of the Servicios.
      * GET|HEAD /servicios
      */
     public function index(Request $request): JsonResponse
     {
-        $servicios = $this->servicioRepository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
+        $query = Servicio::query();
 
-        return $this->sendResponse($servicios->toArray(), 'Servicios retrieved successfully');
+        if ($request->get('skip')) {
+            $query->skip($request->get('skip'));
+        }
+        if ($request->get('limit')) {
+            $query->limit($request->get('limit'));
+        }
+
+        $servicios = $query->get();
+
+        return $this->sendResponse($servicios->toArray(), 'Servicios ');
     }
 
     /**
@@ -45,9 +42,10 @@ class ServicioAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $servicio = $this->servicioRepository->create($input);
+        /** @var Servicio $servicio */
+        $servicio = Servicio::create($input);
 
-        return $this->sendResponse($servicio->toArray(), 'Servicio saved successfully');
+        return $this->sendResponse($servicio->toArray(), 'Servicio guardado');
     }
 
     /**
@@ -57,13 +55,13 @@ class ServicioAPIController extends AppBaseController
     public function show($id): JsonResponse
     {
         /** @var Servicio $servicio */
-        $servicio = $this->servicioRepository->find($id);
+        $servicio = Servicio::find($id);
 
         if (empty($servicio)) {
-            return $this->sendError('Servicio not found');
+            return $this->sendError('Servicio no encontrado');
         }
 
-        return $this->sendResponse($servicio->toArray(), 'Servicio retrieved successfully');
+        return $this->sendResponse($servicio->toArray(), 'Servicio ');
     }
 
     /**
@@ -72,18 +70,17 @@ class ServicioAPIController extends AppBaseController
      */
     public function update($id, UpdateServicioAPIRequest $request): JsonResponse
     {
-        $input = $request->all();
-
         /** @var Servicio $servicio */
-        $servicio = $this->servicioRepository->find($id);
+        $servicio = Servicio::find($id);
 
         if (empty($servicio)) {
-            return $this->sendError('Servicio not found');
+            return $this->sendError('Servicio no encontrado');
         }
 
-        $servicio = $this->servicioRepository->update($input, $id);
+        $servicio->fill($request->all());
+        $servicio->save();
 
-        return $this->sendResponse($servicio->toArray(), 'Servicio updated successfully');
+        return $this->sendResponse($servicio->toArray(), 'Servicio actualizado');
     }
 
     /**
@@ -95,14 +92,14 @@ class ServicioAPIController extends AppBaseController
     public function destroy($id): JsonResponse
     {
         /** @var Servicio $servicio */
-        $servicio = $this->servicioRepository->find($id);
+        $servicio = Servicio::find($id);
 
         if (empty($servicio)) {
-            return $this->sendError('Servicio not found');
+            return $this->sendError('Servicio no encontrado');
         }
 
         $servicio->delete();
 
-        return $this->sendSuccess('Servicio deleted successfully');
+        return $this->sendSuccess('Servicio eliminado');
     }
 }

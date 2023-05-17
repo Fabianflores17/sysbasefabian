@@ -26,4 +26,9 @@ class CreateServicioRequest extends FormRequest
     {
         return Servicio::$rules;
     }
+
+    public function messages()
+    {
+        return Servicio::$messages;
+    }
 }

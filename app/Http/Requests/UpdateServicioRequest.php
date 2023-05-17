@@ -28,4 +28,9 @@ class UpdateServicioRequest extends FormRequest
         
         return $rules;
     }
+
+    public function messages()
+    {
+        return Servicio::$messages;
+    }
 }

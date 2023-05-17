@@ -1,6 +1,11 @@
-{!! $dataTable->table(['width' => '100%', 'class' => 'table table-striped table-bordered']) !!}
+@push('estilos')
+
+@endpush
+
+{!! $dataTable->table(['width' => '100%', 'class' => 'table table-striped ']) !!}
 
 @push('scripts')
+
     {!! $dataTable->scripts() !!}
     <script>
         $(function () {
@@ -14,5 +19,4 @@
 
         })
     </script>
-
 @endpush

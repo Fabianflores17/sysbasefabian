@@ -3,9 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+ use Illuminate\Database\Eloquent\SoftDeletes;
+ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Servicio extends Model
 {
+
+    use SoftDeletes;
+    use HasFactory;
+
     public $table = 'soporte_servicios';
 
     public $fillable = [
@@ -25,19 +31,19 @@ class Servicio extends Model
         'problema' => 'string',
         'solucion' => 'string',
         'recomendaciones' => 'string',
-        'fecha_recibido' => 'date:Y-m-d',
-        'fecha_inicio' => 'date:Y-m-d',
-        'fecha_fin' => 'date:Y-m-d',
-        'fecha_entrega' => 'date:Y-m-d'
+        'fecha_recibido' => 'datetime',
+        'fecha_inicio' => 'datetime',
+        'fecha_fin' => 'datetime',
+        'fecha_entrega' => 'datetime'
     ];
 
     public static $rules = [
         'usuario_id' => 'required',
         'cliente_id' => 'required',
         'equipo_id' => 'required',
-        'problema' => 'required|string',
-        'solucion' => 'required|string',
-        'recomendaciones' => 'nullable|string',
+        'problema' => 'required|string|max:65535',
+        'solucion' => 'required|string|max:65535',
+        'recomendaciones' => 'nullable|string|max:65535',
         'fecha_recibido' => 'required',
         'fecha_inicio' => 'nullable',
         'fecha_fin' => 'nullable',
@@ -47,20 +53,22 @@ class Servicio extends Model
         'deleted_at' => 'nullable'
     ];
 
+    public static $messages = [
+
+    ];
+
     public function cliente(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\App\Models\Cliente::class, 'cliente_id');
+        return $this->belongsTo(\App\Models\SoporteCliente::class, 'cliente_id');
     }
 
     public function equipo(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(\App\Models\Equipo::class, 'equipo_id');
+        return $this->belongsTo(\App\Models\SoporteEquipo::class, 'equipo_id');
     }
 
     public function usuario(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\User::class, 'usuario_id');
     }
-
-
 }

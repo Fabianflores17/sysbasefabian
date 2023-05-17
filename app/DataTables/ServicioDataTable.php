@@ -3,9 +3,9 @@
 namespace App\DataTables;
 
 use App\Models\Servicio;
+use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable;
-use Yajra\DataTables\EloquentDataTable;
-
 
 class ServicioDataTable extends DataTable
 {
@@ -17,24 +17,19 @@ class ServicioDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $dataTable = new EloquentDataTable($query);
 
-        return $dataTable
-        ->addColumn('action', 'servicios.datatables_actions')
-        ->editColumn('usuario_id',function(Servicio $servicio){
-            return $servicio->usuario->name ?? '';
+        return datatables()
+            ->eloquent($query)
+            ->addColumn('action', function(Servicio $servicio){
+                $id = $servicio->id;
+                return view('servicios.datatables_actions',compact('servicio','id'));
+            })
+            ->editColumn('id',function (Servicio $servicio){
 
-        })
-        ->editColumn('cliente_id', function(Servicio $servicio){
-            return $servicio->cliente->nombres.' '.$servicio->cliente->apellidos ?? '';
-        })
-        ->editColumn('tipo_id', function(Servicio $equipo){
-            return $equipo->Equipo->tipo->nombre ?? '';
-        })
-        ->editColumn('equipo_id', function(Servicio $equipo){
-            return $equipo->equipo->numero_serie ?? '';
-           // @dd($equipo);
-        });
+                return $servicio->id;
+
+            })
+            ->rawColumns(['action']);
     }
 
     /**
@@ -45,27 +40,7 @@ class ServicioDataTable extends DataTable
      */
     public function query(Servicio $model)
     {
-        return $model->newQuery()
-        ->with(['usuario:id,name'])
-        ->with(['cliente:id,nombres'])
-        ->with(['equipo:id,numero_serie'])
-        ->with(['equipo.tipo:id,nombre'])
-        ->whereIn('id',function ($q){
-            $q->select('id')->from('soporte_equipos')->whereNull('deleted_at');
-            })
-
-            ->whereIn('id',function ($q){
-            $q->select('id')->from('soporte_clientes')->whereNull('deleted_at');
-            })
-
-            ->whereIn('id',function ($q){
-            $q->select('id')->from('users')->whereNull('deleted_at');
-            })
-        //->with(['equipo:id,numero_serie'])
-
-       // ->with('usuario.unidad:id,nombre')
-        //->with('usuario.puesto:id,nombre')
-        ;
+        return $model->newQuery()->select($model->getTable().'.*');
     }
 
     /**
@@ -76,22 +51,52 @@ class ServicioDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-            ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->addAction(['width' => '120px', 'printable' => false])
-            ->parameters([
-                'dom'       => 'Bfrtip',
-                'stateSave' => true,
-                'order'     => [[0, 'desc']],
-                'buttons'   => [
-                    // Enable Buttons as per your need
-//                    ['extend' => 'create', 'className' => 'btn btn-default btn-sm no-corner',],
-//                    ['extend' => 'export', 'className' => 'btn btn-default btn-sm no-corner',],
-//                    ['extend' => 'print', 'className' => 'btn btn-default btn-sm no-corner',],
-//                    ['extend' => 'reset', 'className' => 'btn btn-default btn-sm no-corner',],
-//                    ['extend' => 'reload', 'className' => 'btn btn-default btn-sm no-corner',],
-                ],
-            ]);
+                ->columns($this->getColumns())
+                ->minifiedAjax()
+                ->ajax([
+                'data' => "function(data) { formatDataDataTables($('#formFiltersDatatables').serializeArray(), data);   }"
+                ])
+                ->info(true)
+                ->language(['url' => asset('js/SpanishDataTables.json')])
+                ->responsive(true)
+                ->stateSave(false)
+                ->orderBy(1,'desc')
+                ->dom('
+                    <"row mb-2"
+                    <"col-sm-12 col-md-6" B>
+                    <"col-sm-12 col-md-6" f>
+                    >
+                    rt
+                    <"row"
+                    <"col-sm-6 order-2 order-sm-1" ip>
+                    <"col-sm-6 order-1 order-sm-2 text-right" l>
+                    >
+                ')
+                ->buttons(
+
+                    Button::make('reset')
+                        ->addClass('')
+                        ->text('<i class="fa fa-undo"></i> <span class="d-none d-sm-inline">Reiniciar</span>'),
+
+                    Button::make('export')
+                        ->extend('collection')
+                        ->addClass('')
+                        ->text('<i class="fa fa-download"></i> <span class="d-none d-sm-inline">Exportar</span>')
+                        ->buttons([
+                            Button::make('print')
+                                ->addClass('dropdown-item')
+                                ->text('<i class="fa fa-print"></i> <span class="d-none d-sm-inline"> Imprimir</span>'),
+                            Button::make('csv')
+                                ->addClass('dropdown-item')
+                                ->text('<i class="fa fa-file-csv"></i> <span class="d-none d-sm-inline"> Csv</span>'),
+                            Button::make('pdf')
+                                ->addClass('dropdown-item')
+                                ->text('<i class="fa fa-file-pdf"></i> <span class="d-none d-sm-inline"> Pdf</span>'),
+                            Button::make('excel')
+                                ->addClass('dropdown-item')
+                                ->text('<i class="fa fa-file-excel"></i> <span class="d-none d-sm-inline"> Excel</span>'),
+                        ]),
+                );
     }
 
     /**
@@ -102,17 +107,21 @@ class ServicioDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'usuario_id'=>['title'=> 'Usuario', 'name' => 'usuario.name', 'data' => 'usuario.name', 'orderable' => 'false'],
-            'cliente_id'=>['title'=> 'Cliente', 'name' => 'cliente.nombres', 'data' => 'cliente.nombres', 'orderable' => 'false'],
-            'equipo_id'=>['title'=> 'Equipo', 'name' => 'equipo.numero_serie', 'data' => 'equipo.numero_serie', 'orderable' => 'false'],
-            'tipo_id'=>['title'=> 'numero serie', 'name' => 'equipo.tipo.nombre', 'data' => 'equipo.tipo.nombre', 'orderable' => 'false'],
-            'problema',
-            'solucion',
-            'recomendaciones',
-            'fecha_recibido',
-            'fecha_inicio',
-            'fecha_fin',
-            'fecha_entrega'
+            Column::make('usuario_id'),
+            Column::make('cliente_id'),
+            Column::make('equipo_id'),
+            Column::make('problema'),
+            Column::make('solucion'),
+            Column::make('recomendaciones'),
+            Column::make('fecha_recibido'),
+            Column::make('fecha_inicio'),
+            Column::make('fecha_fin'),
+            Column::make('fecha_entrega'),
+            Column::computed('action')
+                ->exportable(false)
+                ->printable(false)
+                ->width('20%')
+                ->addClass('text-center')
         ];
     }
 
