@@ -29,7 +29,24 @@ class ServicioDataTable extends DataTable
                 return $servicio->id;
 
             })
-            ->rawColumns(['action']);
+            ->rawColumns(['action'])
+            ->editColumn('cliente_id', function(Servicio $servicio){
+                return $servicio->cliente->nombres ?? '';
+            })
+            ->editColumn('tipo_id', function(Servicio $equipo){
+                return $equipo->Equipo->tipo->nombre ?? '';
+            })
+            ->editColumn('equipo_id', function(Servicio $equipo){
+                return $equipo->equipo->numero_serie ?? '';
+
+            })
+            ->editColumn('usuario_id', function(Servicio $equipo){
+                return $equipo->usuario->name ?? '';
+
+            })
+            ;
+
+
     }
 
     /**
@@ -38,9 +55,30 @@ class ServicioDataTable extends DataTable
      * @param \App\Models\Servicio $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
+    // public function query(Servicio $model)
+    // {
+    //     return $model->newQuery()->select($model->getTable().'.*');
+    // }
+
     public function query(Servicio $model)
     {
-        return $model->newQuery()->select($model->getTable().'.*');
+        return $model->newQuery()
+        ->with(['usuario:id,name'])
+        ->with(['cliente:id,nombres'])
+        ->with(['equipo:id,numero_serie'])
+        ->with(['equipo.tipo:id,nombre'])
+         ->whereIn('equipo_id',function ($q){
+             $q->select('id')->from('soporte_equipos')->whereNull('deleted_at');
+             })
+
+            ->whereIn('cliente_id',function ($q){
+            $q->select('id')->from('soporte_clientes')->whereNull('deleted_at');
+            })
+
+          ->whereIn('usuario_id',function ($q){
+            $q->select('id')->from('users')->whereNull('deleted_at');
+            })
+            ;
     }
 
     /**
@@ -107,9 +145,10 @@ class ServicioDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('usuario_id'),
-            Column::make('cliente_id'),
-            Column::make('equipo_id'),
+            Column::make('usuario.name'),
+            Column::make('cliente.nombres'),
+            Column::make('equipo.numero_serie'),
+            Column::make('equipo.tipo.nombre'),
             Column::make('problema'),
             Column::make('solucion'),
             Column::make('recomendaciones'),

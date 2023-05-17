@@ -48,8 +48,8 @@ class Cliente extends Model
 
     ];
 
-    public function soporteServicios(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function servicio(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(\App\Models\SoporteServicio::class, 'cliente_id');
+        return $this->hasMany(\App\Models\Servicio::class, 'cliente_id');
     }
 }
