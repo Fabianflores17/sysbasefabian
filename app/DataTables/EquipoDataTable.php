@@ -29,7 +29,10 @@ class EquipoDataTable extends DataTable
                 return $equipo->id;
 
             })
-            ->rawColumns(['action']);
+            ->rawColumns(['action'])
+            ->editColumn('tipo_id', function(Equipo $equipo){
+              return $equipo->tipo->nombre ?? null;
+            });
     }
 
     /**
@@ -40,7 +43,14 @@ class EquipoDataTable extends DataTable
      */
     public function query(Equipo $model)
     {
-        return $model->newQuery()->select($model->getTable().'.*');
+        return $model->newQuery()
+        ->with(['tipo:id,nombre'])
+        ->whereIn('tipo_id',function ($q){
+            $q->select('id')->from('soporte_equipo_tipos')->whereNull('deleted_at');
+            })
+
+            ;
+        //return $model->newQuery()->select($model->getTable().'.*');
     }
 
     /**
@@ -107,7 +117,7 @@ class EquipoDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            Column::make('tipo_id'),
+            Column::make('tipo.nombre'),
             Column::make('numero_serie'),
             Column::make('imei'),
             Column::make('observaciones'),
