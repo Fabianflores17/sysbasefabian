@@ -3,8 +3,9 @@
 namespace App\DataTables;
 
 use App\Models\Cliente;
+use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable;
-use Yajra\DataTables\EloquentDataTable;
 
 class ClienteDataTable extends DataTable
 {
@@ -16,9 +17,19 @@ class ClienteDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $dataTable = new EloquentDataTable($query);
 
-        return $dataTable->addColumn('action', 'clientes.datatables_actions');
+        return datatables()
+            ->eloquent($query)
+            ->addColumn('action', function(Cliente $cliente){
+                $id = $cliente->id;
+                return view('clientes.datatables_actions',compact('cliente','id'));
+            })
+            ->editColumn('id',function (Cliente $cliente){
+
+                return $cliente->id;
+
+            })
+            ->rawColumns(['action']);
     }
 
     /**
@@ -29,7 +40,7 @@ class ClienteDataTable extends DataTable
      */
     public function query(Cliente $model)
     {
-        return $model->newQuery();
+        return $model->newQuery()->select($model->getTable().'.*');
     }
 
     /**
@@ -40,22 +51,52 @@ class ClienteDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-            ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->addAction(['width' => '120px', 'printable' => false])
-            ->parameters([
-                'dom'       => 'Bfrtip',
-                'stateSave' => true,
-                'order'     => [[0, 'desc']],
-                'buttons'   => [
-                    // Enable Buttons as per your need
-//                    ['extend' => 'create', 'className' => 'btn btn-default btn-sm no-corner',],
-//                    ['extend' => 'export', 'className' => 'btn btn-default btn-sm no-corner',],
-//                    ['extend' => 'print', 'className' => 'btn btn-default btn-sm no-corner',],
-//                    ['extend' => 'reset', 'className' => 'btn btn-default btn-sm no-corner',],
-//                    ['extend' => 'reload', 'className' => 'btn btn-default btn-sm no-corner',],
-                ],
-            ]);
+                ->columns($this->getColumns())
+                ->minifiedAjax()
+                ->ajax([
+                'data' => "function(data) { formatDataDataTables($('#formFiltersDatatables').serializeArray(), data);   }"
+                ])
+                ->info(true)
+                ->language(['url' => asset('js/SpanishDataTables.json')])
+                ->responsive(true)
+                ->stateSave(false)
+                ->orderBy(1,'desc')
+                ->dom('
+                    <"row mb-2"
+                    <"col-sm-12 col-md-6" B>
+                    <"col-sm-12 col-md-6" f>
+                    >
+                    rt
+                    <"row"
+                    <"col-sm-6 order-2 order-sm-1" ip>
+                    <"col-sm-6 order-1 order-sm-2 text-right" l>
+                    >
+                ')
+                ->buttons(
+
+                    Button::make('reset')
+                        ->addClass('')
+                        ->text('<i class="fa fa-undo"></i> <span class="d-none d-sm-inline">Reiniciar</span>'),
+
+                    Button::make('export')
+                        ->extend('collection')
+                        ->addClass('')
+                        ->text('<i class="fa fa-download"></i> <span class="d-none d-sm-inline">Exportar</span>')
+                        ->buttons([
+                            Button::make('print')
+                                ->addClass('dropdown-item')
+                                ->text('<i class="fa fa-print"></i> <span class="d-none d-sm-inline"> Imprimir</span>'),
+                            Button::make('csv')
+                                ->addClass('dropdown-item')
+                                ->text('<i class="fa fa-file-csv"></i> <span class="d-none d-sm-inline"> Csv</span>'),
+                            Button::make('pdf')
+                                ->addClass('dropdown-item')
+                                ->text('<i class="fa fa-file-pdf"></i> <span class="d-none d-sm-inline"> Pdf</span>'),
+                            Button::make('excel')
+                                ->addClass('dropdown-item')
+                                ->text('<i class="fa fa-file-excel"></i> <span class="d-none d-sm-inline"> Excel</span>'),
+                        ]),
+                );
     }
 
     /**
@@ -66,12 +107,17 @@ class ClienteDataTable extends DataTable
     protected function getColumns()
     {
         return [
-            'nombres',
-            'apellidos',
-            'dpi',
-            'telefono',
-            'direccion',
-            'correo'
+            Column::make('nombres'),
+            Column::make('apellidos'),
+            Column::make('dpi'),
+            Column::make('telefono'),
+            Column::make('direccion'),
+            Column::make('correo'),
+            Column::computed('action')
+                ->exportable(false)
+                ->printable(false)
+                ->width('20%')
+                ->addClass('text-center')
         ];
     }
 

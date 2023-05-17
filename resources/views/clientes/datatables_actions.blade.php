@@ -1,16 +1,24 @@
-{!! Form::open(['route' => ['clientes.destroy', $id], 'method' => 'delete']) !!}
-<div class='btn-group'>
-    <a href="{{ route('clientes.show', $id) }}" class='btn btn-default btn-xs'>
+@can('Ver Clientes')
+    <a href="{{ route('clientes.show', $id) }}" data-toggle="tooltip" title="Ver" class='btn btn-sm btn-outline-secondary'>
         <i class="fa fa-eye"></i>
     </a>
-    <a href="{{ route('clientes.edit', $id) }}" class='btn btn-default btn-xs'>
+    @endcan
+
+@can('Editar Clientes')
+    <a href="{{ route('clientes.edit', $id) }}" data-toggle="tooltip" title="Editar" class='btn btn-sm btn-outline-info'>
         <i class="fa fa-edit"></i>
     </a>
-    {!! Form::button('<i class="fa fa-trash"></i>', [
-        'type' => 'submit',
-        'class' => 'btn btn-danger btn-xs',
-        'onclick' => 'return confirm("'.__('Desea eliminar este Cliente').'")'
+@endcan
 
-    ]) !!}
-</div>
-{!! Form::close() !!}
+@can('Eliminar Clientes')
+    <a href="#" onclick="deleteItemDt(this)" data-id="{{ $id }}" data-toggle="tooltip" title="Eliminar" class='btn btn-sm btn-outline-danger'>
+        <i class="fa fa-trash-alt"></i>
+    </a>
+
+
+    <form action="{{ route('clientes.destroy', $id) }}" method="POST" id="delete-form{{ $id }}">
+        @method('DELETE')
+        @csrf
+    </form>
+@endcan
+

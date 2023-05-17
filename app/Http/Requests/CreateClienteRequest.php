@@ -26,4 +26,9 @@ class CreateClienteRequest extends FormRequest
     {
         return Cliente::$rules;
     }
+
+    public function messages()
+    {
+        return Cliente::$messages;
+    }
 }

@@ -1,17 +1,17 @@
 @can('Ver Tipo Equipos')
-    <a href="{{ route('tipoEquipos.show', $id) }}" data-toggle="tooltip" title="Ver" class='btn btn-icon btn-flat-secondary rounded-circle'>
+    <a href="{{ route('tipoEquipos.show', $id) }}" data-toggle="tooltip" title="Ver" class='btn btn-sm btn-outline-secondary'>
         <i class="fa fa-eye"></i>
     </a>
-@endcan
+    @endcan
 
 @can('Editar Tipo Equipos')
-    <a href="{{ route('tipoEquipos.edit', $id) }}" data-toggle="tooltip" title="Editar" class='btn btn-icon btn-flat-info rounded-circle'>
+    <a href="{{ route('tipoEquipos.edit', $id) }}" data-toggle="tooltip" title="Editar" class='btn btn-sm btn-outline-info'>
         <i class="fa fa-edit"></i>
     </a>
 @endcan
 
 @can('Eliminar Tipo Equipos')
-    <a href="#" onclick="deleteItemDt(this)" data-id="{{ $id }}" data-toggle="tooltip" title="Eliminar" class='btn btn-icon btn-flat-danger rounded-circle'>
+    <a href="#" onclick="deleteItemDt(this)" data-id="{{ $id }}" data-toggle="tooltip" title="Eliminar" class='btn btn-sm btn-outline-danger'>
         <i class="fa fa-trash-alt"></i>
     </a>
 

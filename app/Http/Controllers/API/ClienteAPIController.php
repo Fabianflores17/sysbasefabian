@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API;
 use App\Http\Requests\API\CreateClienteAPIRequest;
 use App\Http\Requests\API\UpdateClienteAPIRequest;
 use App\Models\Cliente;
-use App\Repositories\ClienteRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
@@ -15,26 +14,24 @@ use App\Http\Controllers\AppBaseController;
  */
 class ClienteAPIController extends AppBaseController
 {
-    private ClienteRepository $clienteRepository;
-
-    public function __construct(ClienteRepository $clienteRepo)
-    {
-        $this->clienteRepository = $clienteRepo;
-    }
-
     /**
      * Display a listing of the Clientes.
      * GET|HEAD /clientes
      */
     public function index(Request $request): JsonResponse
     {
-        $clientes = $this->clienteRepository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
+        $query = Cliente::query();
 
-        return $this->sendResponse($clientes->toArray(), 'Clientes retrieved successfully');
+        if ($request->get('skip')) {
+            $query->skip($request->get('skip'));
+        }
+        if ($request->get('limit')) {
+            $query->limit($request->get('limit'));
+        }
+
+        $clientes = $query->get();
+
+        return $this->sendResponse($clientes->toArray(), 'Clientes ');
     }
 
     /**
@@ -45,9 +42,10 @@ class ClienteAPIController extends AppBaseController
     {
         $input = $request->all();
 
-        $cliente = $this->clienteRepository->create($input);
+        /** @var Cliente $cliente */
+        $cliente = Cliente::create($input);
 
-        return $this->sendResponse($cliente->toArray(), 'Cliente saved successfully');
+        return $this->sendResponse($cliente->toArray(), 'Cliente guardado');
     }
 
     /**
@@ -57,13 +55,13 @@ class ClienteAPIController extends AppBaseController
     public function show($id): JsonResponse
     {
         /** @var Cliente $cliente */
-        $cliente = $this->clienteRepository->find($id);
+        $cliente = Cliente::find($id);
 
         if (empty($cliente)) {
-            return $this->sendError('Cliente not found');
+            return $this->sendError('Cliente no encontrado');
         }
 
-        return $this->sendResponse($cliente->toArray(), 'Cliente retrieved successfully');
+        return $this->sendResponse($cliente->toArray(), 'Cliente ');
     }
 
     /**
@@ -72,18 +70,17 @@ class ClienteAPIController extends AppBaseController
      */
     public function update($id, UpdateClienteAPIRequest $request): JsonResponse
     {
-        $input = $request->all();
-
         /** @var Cliente $cliente */
-        $cliente = $this->clienteRepository->find($id);
+        $cliente = Cliente::find($id);
 
         if (empty($cliente)) {
-            return $this->sendError('Cliente not found');
+            return $this->sendError('Cliente no encontrado');
         }
 
-        $cliente = $this->clienteRepository->update($input, $id);
+        $cliente->fill($request->all());
+        $cliente->save();
 
-        return $this->sendResponse($cliente->toArray(), 'Cliente updated successfully');
+        return $this->sendResponse($cliente->toArray(), 'Cliente actualizado');
     }
 
     /**
@@ -95,14 +92,14 @@ class ClienteAPIController extends AppBaseController
     public function destroy($id): JsonResponse
     {
         /** @var Cliente $cliente */
-        $cliente = $this->clienteRepository->find($id);
+        $cliente = Cliente::find($id);
 
         if (empty($cliente)) {
-            return $this->sendError('Cliente not found');
+            return $this->sendError('Cliente no encontrado');
         }
 
         $cliente->delete();
 
-        return $this->sendSuccess('Cliente deleted successfully');
+        return $this->sendSuccess('Cliente eliminado');
     }
 }

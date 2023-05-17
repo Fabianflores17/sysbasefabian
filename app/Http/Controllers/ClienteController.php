@@ -6,20 +6,19 @@ use App\DataTables\ClienteDataTable;
 use App\Http\Requests\CreateClienteRequest;
 use App\Http\Requests\UpdateClienteRequest;
 use App\Http\Controllers\AppBaseController;
-use App\Repositories\ClienteRepository;
+use App\Models\Cliente;
 use Illuminate\Http\Request;
-use Flash;
 
 class ClienteController extends AppBaseController
 {
-    /** @var ClienteRepository $clienteRepository*/
-    private $clienteRepository;
 
-    public function __construct(ClienteRepository $clienteRepo)
+    public function __construct()
     {
-        $this->clienteRepository = $clienteRepo;
+        $this->middleware('permission:Ver Clientes')->only('show');
+        $this->middleware('permission:Crear Clientes')->only(['create','store']);
+        $this->middleware('permission:Editar Clientes')->only(['edit','update']);
+        $this->middleware('permission:Eliminar Clientes')->only('destroy');
     }
-
     /**
      * Display a listing of the Cliente.
      */
@@ -44,9 +43,10 @@ class ClienteController extends AppBaseController
     {
         $input = $request->all();
 
-        $cliente = $this->clienteRepository->create($input);
+        /** @var Cliente $cliente */
+        $cliente = Cliente::create($input);
 
-        Flash::success('Cliente saved successfully.');
+        flash()->success('Cliente guardado.');
 
         return redirect(route('clientes.index'));
     }
@@ -56,10 +56,11 @@ class ClienteController extends AppBaseController
      */
     public function show($id)
     {
-        $cliente = $this->clienteRepository->find($id);
+        /** @var Cliente $cliente */
+        $cliente = Cliente::find($id);
 
         if (empty($cliente)) {
-            Flash::error('Cliente not found');
+            flash()->error('Cliente no encontrado');
 
             return redirect(route('clientes.index'));
         }
@@ -72,10 +73,11 @@ class ClienteController extends AppBaseController
      */
     public function edit($id)
     {
-        $cliente = $this->clienteRepository->find($id);
+        /** @var Cliente $cliente */
+        $cliente = Cliente::find($id);
 
         if (empty($cliente)) {
-            Flash::error('Cliente not found');
+            flash()->error('Cliente no encontrado');
 
             return redirect(route('clientes.index'));
         }
@@ -88,17 +90,19 @@ class ClienteController extends AppBaseController
      */
     public function update($id, UpdateClienteRequest $request)
     {
-        $cliente = $this->clienteRepository->find($id);
+        /** @var Cliente $cliente */
+        $cliente = Cliente::find($id);
 
         if (empty($cliente)) {
-            Flash::error('Cliente not found');
+            flash()->error('Cliente no encontrado');
 
             return redirect(route('clientes.index'));
         }
 
-        $cliente = $this->clienteRepository->update($request->all(), $id);
+        $cliente->fill($request->all());
+        $cliente->save();
 
-        Flash::success('Cliente updated successfully.');
+        flash()->success('Cliente actualizado.');
 
         return redirect(route('clientes.index'));
     }
@@ -110,17 +114,18 @@ class ClienteController extends AppBaseController
      */
     public function destroy($id)
     {
-        $cliente = $this->clienteRepository->find($id);
+        /** @var Cliente $cliente */
+        $cliente = Cliente::find($id);
 
         if (empty($cliente)) {
-            Flash::error('Cliente not found');
+            flash()->error('Cliente no encontrado');
 
             return redirect(route('clientes.index'));
         }
 
-        $this->clienteRepository->delete($id);
+        $cliente->delete();
 
-        Flash::success('Cliente deleted successfully.');
+        flash()->success('Cliente eliminado.');
 
         return redirect(route('clientes.index'));
     }

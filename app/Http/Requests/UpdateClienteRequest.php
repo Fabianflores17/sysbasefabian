@@ -28,4 +28,9 @@ class UpdateClienteRequest extends FormRequest
         
         return $rules;
     }
+
+    public function messages()
+    {
+        return Cliente::$messages;
+    }
 }
