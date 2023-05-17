@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateEquipoRequest;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\EquipoRepository;
 use Illuminate\Http\Request;
+use App\Models\Equipo;
 use Flash;
 
 class EquipoController extends AppBaseController
@@ -108,20 +109,39 @@ class EquipoController extends AppBaseController
      *
      * @throws \Exception
      */
-    public function destroy($id)
-    {
-        $equipo = $this->equipoRepository->find($id);
+//     public function destroy($id)
+//     {
+//         $equipo = $this->equipoRepository->find($id);
 
-        if (empty($equipo)) {
-            Flash::error('Equipo not found');
+//         if (empty($equipo)) {
+//             Flash::error('Equipo not found');
 
-            return redirect(route('equipos.index'));
-        }
+//             return redirect(route('equipos.index'));
+//         }
 
-        $this->equipoRepository->delete($id);
+//         $this->equipoRepository->delete($id);
 
-        Flash::success('Equipo deleted successfully.');
+//         Flash::success('Equipo deleted successfully.');
 
-        return redirect(route('equipos.index'));
-    }
+//         return redirect(route('equipos.index'));
+//     }
+
+public function destroy($id)
+{
+/** @var equipo $equipo */
+$equipo = Equipo::find($id);
+
+if (empty($equipo)) {
+flash()->error('Equipo no encontrado');
+
+return redirect(route('equipos.index'));
 }
+
+$equipo->delete();
+
+flash()->success('Equipo eliminado.');
+
+return redirect(route('equipos.index'));
+}
+}
+

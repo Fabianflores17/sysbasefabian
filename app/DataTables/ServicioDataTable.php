@@ -33,7 +33,7 @@ class ServicioDataTable extends DataTable
         })
         ->editColumn('equipo_id', function(Servicio $equipo){
             return $equipo->equipo->numero_serie ?? '';
-            @dd($equipo);
+           // @dd($equipo);
         });
     }
 
@@ -49,6 +49,18 @@ class ServicioDataTable extends DataTable
         ->with(['usuario:id,name'])
         ->with(['cliente:id,nombres'])
         ->with(['equipo:id,numero_serie'])
+        ->with(['equipo.tipo:id,nombre'])
+        ->whereIn('id',function ($q){
+            $q->select('id')->from('soporte_equipos')->whereNull('deleted_at');
+            })
+
+            ->whereIn('id',function ($q){
+            $q->select('id')->from('soporte_clientes')->whereNull('deleted_at');
+            })
+
+            ->whereIn('id',function ($q){
+            $q->select('id')->from('users')->whereNull('deleted_at');
+            })
         //->with(['equipo:id,numero_serie'])
 
        // ->with('usuario.unidad:id,nombre')
@@ -93,7 +105,7 @@ class ServicioDataTable extends DataTable
             'usuario_id'=>['title'=> 'Usuario', 'name' => 'usuario.name', 'data' => 'usuario.name', 'orderable' => 'false'],
             'cliente_id'=>['title'=> 'Cliente', 'name' => 'cliente.nombres', 'data' => 'cliente.nombres', 'orderable' => 'false'],
             'equipo_id'=>['title'=> 'Equipo', 'name' => 'equipo.numero_serie', 'data' => 'equipo.numero_serie', 'orderable' => 'false'],
-            //'tipo_id'=>['title'=> 'numero serie', 'name' => 'equipo_id', 'data' => 'tipo_id', 'orderable' => 'false'],
+            'tipo_id'=>['title'=> 'numero serie', 'name' => 'equipo.tipo.nombre', 'data' => 'equipo.tipo.nombre', 'orderable' => 'false'],
             'problema',
             'solucion',
             'recomendaciones',

@@ -35,7 +35,12 @@ class EquipoDataTable extends DataTable
     public function query(Equipo $model)
     {
       // return $model->newQuery();
-       return $model->newQuery()->with(['tipo:id,nombre']);
+       return $model->newQuery()
+       ->with(['tipo:id,nombre'])
+       ->whereIn('tipo_id',function ($q){
+        $q->select('id')->from('soporte_equipo_tipos')->whereNull('deleted_at');
+        })
+       ;
     }
 
     /**
