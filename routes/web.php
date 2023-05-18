@@ -14,6 +14,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TipoEquipoController;
 use  App\Http\Controllers\EquipoController;
+use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ServicioController;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes(['verify' => true]);
@@ -70,8 +72,8 @@ Route::group(['prefix' => 'admin','middleware' => ['role:Admin|Superadmin|Develo
     Route::resource('permissions', PermissionController::class);
     Route::resource('equipos', EquipoController::class);
     Route::resource('tipoequipos', TipoEquipoController::class);
-
-
+    Route::resource('clientes', ClienteController::class);
+    Route::resource('servicios', ServicioController::class);
 
 });
 
@@ -104,7 +106,6 @@ Route::group(['prefix' => ''], function () {
 
 
 
-Route::resource('clientes', App\Http\Controllers\ClienteController::class);
-Route::resource('servicios', App\Http\Controllers\ServicioController::class);
+
 Route::resource('tipoEquipos', App\Http\Controllers\TipoEquipoController::class);
 Route::resource('equipos', App\Http\Controllers\EquipoController::class);

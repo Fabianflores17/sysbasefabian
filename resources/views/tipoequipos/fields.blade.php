@@ -1,7 +1,7 @@
 <!-- Nombre Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('nombre', 'Nombre:') !!}
-    {!! Form::text('nombre', null, ['class' => 'form-control', 'required']) !!}
+    {!! Form::text('nombre', null, ['class' => 'form-control', 'required', 'maxlength' => 255, 'maxlength' => 255, 'maxlength' => 255]) !!}
 </div>
 
 <!-- Activo Field -->
@@ -9,53 +9,48 @@
     {!! Form::label('activo', 'Activo:') !!}
     {!! Form::text('activo', null, ['class' => 'form-control']) !!}
 </div> --}}
+
 <div class="form-group col-sm-6">
-    <label for="activo">Activo:&nbsp;</label><br>
-    <input type="hidden" name="activo" :value="activo ? 1 : 0">
+    <label for="activo">Activo;</label><br>
+    <input type="hidden" name="activo" :value="activo ? 'si':'no'">
     <toggle-button v-model="activo"
     :sync="true"
-    :labels="{checked: 'SI', unchecked: 'NO'}"
+    :labels="{checked: 'Si', unchecked: 'No'}"
     :height="30"
     :width="60"
     :value="false"></toggle-button>
 
     </div>
-    tipoEquipo
 
-    @push('scripts')
+
+@push('scripts')
 
 <script>
-$(function () {
-$("input[name='q']").hide();
-});
+// $(function () {
+// $("input[name='q']").hide();
+// });
 const app = new Vue({
     name:'app',
     el: '#root',
 
 created() {
 
-    this.tipoId;
-    this.tipoName;
+this.activoID
 
         },
 
     data: {
-    activo: @json($TipoEquipo->activo ?? false),
+    activo: @json(($tipoEquipo->activo ?? false)=='si' ? true : false),
 
     },
 computed: {
-tipoId() {
-    if (this.TipoEquipo) {
-        return this.TipoEquipo.id;
+    activoID() {
+        if (this.activo == 'si') {
+        return true;
             }
-        return null;
-        },
-tipoName(){
-    if (this.TipoEquipo){
-      return this.TipoEquipo.nombre;
-        }
-        return null
-        },
+        return false;
+          },
+
     }
             });
 </script>

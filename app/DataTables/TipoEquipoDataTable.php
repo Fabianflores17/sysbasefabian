@@ -22,7 +22,7 @@ class TipoEquipoDataTable extends DataTable
             ->eloquent($query)
             ->addColumn('action', function(TipoEquipo $tipoEquipo){
                 $id = $tipoEquipo->id;
-                return view('tipo_equipos.datatables_actions',compact('tipoEquipo','id'));
+                return view('tipoequipos.datatables_actions',compact('tipoEquipo','id'));
             })
             ->editColumn('id',function (TipoEquipo $tipoEquipo){
 
@@ -124,6 +124,6 @@ class TipoEquipoDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'tipo_equipos_datatable_' . time();
+        return 'tipoequipos_datatable_' . time();
     }
 }

@@ -24,7 +24,7 @@ class TipoEquipoController extends AppBaseController
      */
     public function index(TipoEquipoDataTable $tipoEquipoDataTable)
     {
-    return $tipoEquipoDataTable->render('tipo_equipos.index');
+    return $tipoEquipoDataTable->render('tipoequipos.index');
     }
 
 
@@ -33,7 +33,7 @@ class TipoEquipoController extends AppBaseController
      */
     public function create()
     {
-        return view('tipo_equipos.create');
+        return view('tipoequipos.create');
     }
 
     /**
@@ -65,7 +65,7 @@ class TipoEquipoController extends AppBaseController
             return redirect(route('tipoEquipos.index'));
         }
 
-        return view('tipo_equipos.show')->with('tipoEquipo', $tipoEquipo);
+        return view('tipoequipos.show')->with('tipoEquipo', $tipoEquipo);
     }
 
     /**
@@ -82,7 +82,7 @@ class TipoEquipoController extends AppBaseController
             return redirect(route('tipoEquipos.index'));
         }
 
-        return view('tipo_equipos.edit')->with('tipoEquipo', $tipoEquipo);
+        return view('tipoequipos.edit')->with('tipoEquipo', $tipoEquipo);
     }
 
     /**
