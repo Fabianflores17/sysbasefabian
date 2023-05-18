@@ -90,6 +90,7 @@ class TipoEquipoController extends AppBaseController
      */
     public function update($id, UpdateTipoEquipoRequest $request)
     {
+       // dd($request->all()); mostrar como se esta enviado los datos
         /** @var TipoEquipo $tipoEquipo */
         $tipoEquipo = TipoEquipo::find($id);
 

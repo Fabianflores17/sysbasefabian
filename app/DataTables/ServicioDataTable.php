@@ -30,23 +30,25 @@ class ServicioDataTable extends DataTable
 
             })
             ->rawColumns(['action'])
-            ->editColumn('cliente_id', function(Servicio $servicio){
+            ->editColumn('cliente.nombres', function(Servicio $servicio){
                 return $servicio->cliente->nombres ?? '';
             })
-            ->editColumn('tipo_id', function(Servicio $equipo){
-                return $equipo->Equipo->tipo->nombre ?? '';
+            ->editColumn('cliente.apellidos', function(Servicio $servicio){
+                return $servicio->cliente->apellidos ?? '';
             })
-            ->editColumn('equipo_id', function(Servicio $equipo){
-                return $equipo->equipo->numero_serie ?? '';
+            ->editColumn('equipo.tipo.nombre', function(Servicio $equipo){
+                 return $equipo->Equipo->tipo->nombre ?? '';
+             })
+
+            ->editColumn('equipo.numero_serie', function(Servicio $servicio){
+                return $servicio->equipo->numero_serie ?? '';
 
             })
-            ->editColumn('usuario_id', function(Servicio $equipo){
+            ->editColumn('usuario.name', function(Servicio $equipo){
                 return $equipo->usuario->name ?? '';
 
             })
             ;
-
-
     }
 
     /**
@@ -55,30 +57,26 @@ class ServicioDataTable extends DataTable
      * @param \App\Models\Servicio $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    // public function query(Servicio $model)
-    // {
-    //     return $model->newQuery()->select($model->getTable().'.*');
-    // }
-
     public function query(Servicio $model)
     {
-        return $model->newQuery()
-        ->with(['usuario:id,name'])
-        ->with(['cliente:id,nombres'])
-        ->with(['equipo:id,numero_serie'])
-        ->with(['equipo.tipo:id,nombre'])
-         ->whereIn('equipo_id',function ($q){
-             $q->select('id')->from('soporte_equipos')->whereNull('deleted_at');
-             })
+       // return $model->newQuery()->select($model->getTable().'.*');
+       return $model->newQuery()->select($model->getTable().'.*')
+       ->with(['usuario'])
+       ->with(['cliente'])
+       ->with(['equipo'])
+       ->with(['equipo.tipo'])
+    //    ->whereIn('equipo_id',function ($q){
+        // $q->select('id')->from('soporte_equipos')->whereNull('deleted_at');
+        // })
 
-            ->whereIn('cliente_id',function ($q){
-            $q->select('id')->from('soporte_clientes')->whereNull('deleted_at');
-            })
+        // ->whereIn('cliente_id',function ($q){
+        // $q->select('id')->from('soporte_clientes')->whereNull('deleted_at');
+        // })
 
-          ->whereIn('usuario_id',function ($q){
-            $q->select('id')->from('users')->whereNull('deleted_at');
-            })
-            ;
+        // ->whereIn('usuario_id',function ($q){
+        // $q->select('id')->from('users')->whereNull('deleted_at');
+        // })
+       ;
     }
 
     /**
@@ -145,8 +143,18 @@ class ServicioDataTable extends DataTable
     protected function getColumns()
     {
         return [
+            Column::make('id'),
             Column::make('usuario.name'),
-            Column::make('cliente.nombres'),
+            //Column::make('cliente.nombres'), se mostraba nombre y apellid junto
+            Column::make('nombres')
+            ->data('cliente.nombres')
+            ->name('cliente.nombres')
+            ->visible(true),
+
+            Column::make('apellidos')
+            ->data('cliente.apellidos')//el attributo del objeto
+            ->name('cliente.apellidos')//donde busca
+            ->visible(true),
             Column::make('equipo.numero_serie'),
             Column::make('equipo.tipo.nombre'),
             Column::make('problema'),

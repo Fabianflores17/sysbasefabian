@@ -40,7 +40,7 @@
                     {!! Form::model($tipoEquipo, ['route' => ['tipoEquipos.update', $tipoEquipo->id], 'method' => 'patch','class' => 'esperar']) !!}
 
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row" id="root">
                             @include('tipo_equipos.fields')
                         </div>
                     </div>

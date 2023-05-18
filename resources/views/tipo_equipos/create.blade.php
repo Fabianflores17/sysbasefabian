@@ -33,7 +33,7 @@
                 <div class="card-body">
 
                     {!! Form::open(['route' => 'tipoEquipos.store','class' => 'esperar']) !!}
-                    <div class="form-row">
+                    <div class="form-row" id="root">
 
                         @include('tipo_equipos.fields')
 
