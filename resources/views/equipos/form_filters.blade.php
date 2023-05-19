@@ -11,22 +11,22 @@
 
                         <div class="row">
                            <!-- Tipo Equipo Id Field -->
-                            <div class="form-group col-sm-6" id="root">
+                            <div class="form-group col-sm-4" id="root">
                                 <label for="tipoequipo">Tipo </label>
-                                <multiselect v-model="tipoequipo" :options="tipoequipos" label="nombre" placeholder="Selecciones uno" >
+                                <multiselect v-model="tipoequipo" :options="tipoequipos" track-by="id" label="nombre" :multiple="true" placeholder="Selecciones uno" >
                                 </multiselect>
-                                <input type="hidden" name="tipo_id" id="tipo_id" :value="tipoId">
-                                <input type="hidden" name="tipo_name" id="tipo_name" :value="tipoName">
+                                <input type="hidden" name="tipo_id[]" id="tipo_id" :value="item.id" v-for="item in tipoequipo">
+                                {{-- <input type="hidden" name="tipo_id" id="tipo_id" :value="tipoId"> --}}
                             </div>
 
                             <!-- Numero Serie Field -->
-                            <div class="form-group col-sm-6">
+                            <div class="form-group col-sm-4">
                                 {!! Form::label('numero_serie', 'Numero Serie:') !!}
                                 {!! Form::text('numero_serie', null, ['class' => 'form-control','maxlength' => 255, 'maxlength' => 255, 'maxlength' => 255]) !!}
                             </div>
 
                             <!-- Imei Field -->
-                            <div class="form-group col-sm-6">
+                            <div class="form-group col-sm-4">
                                 {!! Form::label('imei', 'Imei:') !!}
                                 {!! Form::text('imei', null, ['class' => 'form-control', 'maxlength' => 255, 'maxlength' => 255, 'maxlength' => 255]) !!}
                             </div>
@@ -82,7 +82,7 @@ this.tipoName;
 data: {
 
 tipoequipos: @json(\App\Models\TipoEquipo::all() ?? []),
-tipoequipo: @json(\App\Models\TipoEquipo::whereId(old('tipo_id'))->first() ?? $equipo->tipo ?? null),
+tipoequipo: null,
 
 
 },

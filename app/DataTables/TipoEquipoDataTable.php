@@ -29,7 +29,11 @@ class TipoEquipoDataTable extends DataTable
                 return $tipoEquipo->id;
 
             })
-            ->rawColumns(['action']);
+            ->rawColumns(['action'])
+            ->editColumn('activo', function (TipoEquipo $tipoEquipo){
+
+                return view('tipoequipos.activo',compact('tipoEquipo'));
+            });
     }
 
     /**
