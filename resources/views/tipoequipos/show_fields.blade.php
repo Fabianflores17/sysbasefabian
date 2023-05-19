@@ -7,6 +7,13 @@
 <!-- Activo Field -->
 <div class="col-sm-12">
     {!! Form::label('activo', 'Activo:') !!}
-    <p>{{ $tipoEquipo->activo }}</p>
+
+
+    @if ($tipoEquipo->activo == 'si')
+    <span class="badge badge-pill badge-success">{{ $tipoEquipo->activo }}</span>
+    @else
+    <span class="badge badge-pill badge-danger">{{ $tipoEquipo->activo }}</span>
+    @endif
+
 </div>
 

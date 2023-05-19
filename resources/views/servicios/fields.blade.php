@@ -1,6 +1,4 @@
 <!-- Usuario Id Field -->
-
-
   <div class="form-group col-sm-6" >
     <label for="tipousuario">Usuario </label>
         <multiselect v-model="tipousuario" :options="tipousuarios" label="name" placeholder="Selecciones uno" >

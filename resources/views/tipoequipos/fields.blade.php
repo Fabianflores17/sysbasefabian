@@ -15,6 +15,8 @@
     <input type="hidden" name="activo" :value="activo ? 'si':'no'">
     <toggle-button v-model="activo"
     :sync="true"
+    :color="{checked: '#85C98D', unchecked: '#FE5C49'}"
+    :switch-color="{checked: '#25EF02', unchecked: '#B62504'}"
     :labels="{checked: 'Si', unchecked: 'No'}"
     :height="30"
     :width="60"

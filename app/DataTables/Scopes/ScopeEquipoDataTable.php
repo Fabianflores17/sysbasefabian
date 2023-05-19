@@ -35,7 +35,6 @@ class ScopeEquipoDataTable implements DataTableScope
             }else{
                 $query->where('tipo_id',$this->tipo_id);
             }
-
         }
         if (!is_null($this->numero_serie)){
             if (is_array($this->numero_serie)){

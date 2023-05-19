@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\Scopes\ScopeServicioDataTable;
 use App\DataTables\ServicioDataTable;
 use App\Http\Requests\CreateServicioRequest;
 use App\Http\Requests\UpdateServicioRequest;
@@ -24,6 +25,10 @@ class ServicioController extends AppBaseController
      */
     public function index(ServicioDataTable $servicioDataTable)
     {
+
+        $scope = new ScopeServicioDataTable();
+        $servicioDataTable->addScope($scope);
+
     return $servicioDataTable->render('servicios.index');
     }
 

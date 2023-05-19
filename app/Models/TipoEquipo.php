@@ -19,6 +19,11 @@ class TipoEquipo extends Model
         'activo'
     ];
 
+    public $appends = [
+        'color_estado',
+
+    ];
+
     protected $casts = [
         'nombre' => 'string',
         'activo' => 'string'
@@ -39,5 +44,10 @@ class TipoEquipo extends Model
     public function soporteEquipos(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(\App\Models\SoporteEquipo::class, 'tipo_id');
+    }
+
+
+    public function getColorEstadoAttribute(){
+        return $this->activo == 'si' ? 'badge-success' : 'badge-danger';
     }
 }

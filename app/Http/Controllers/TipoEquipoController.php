@@ -75,7 +75,7 @@ class TipoEquipoController extends AppBaseController
     {
         /** @var TipoEquipo $tipoEquipo */
         $tipoEquipo = TipoEquipo::find($id);
-
+        //return $tipoEquipo;
         if (empty($tipoEquipo)) {
             flash()->error('Tipo Equipo no encontrado');
 

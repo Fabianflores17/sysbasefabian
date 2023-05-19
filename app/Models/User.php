@@ -123,10 +123,14 @@ class User extends Authenticatable implements  MustVerifyEmail,HasMedia
 
         $allOptions = $opcionesDirectas->merge($opcionesPorRol);
 
-
 //        dd($this->id,$opcionesDirectas->toArray(),$opcionesPorRol->toArray(),$allOptions->toArray());
 
         return $allOptions;
+    }
+
+    public function Serviciosuser(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\Servicio::class, 'usuario_id');
     }
 
 
