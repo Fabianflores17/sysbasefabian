@@ -59,7 +59,7 @@ require('./jquery.bootstrap-duallistbox.js');
 window.Cropper  = require('cropperjs/dist/cropper.min');
 
 /**
- * Funciones personalizadas
+ * Funciones personalizadasP
  */
 require('./fn.js');
 

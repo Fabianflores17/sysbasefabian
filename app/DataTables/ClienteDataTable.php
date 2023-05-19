@@ -54,7 +54,7 @@ class ClienteDataTable extends DataTable
                 ->columns($this->getColumns())
                 ->minifiedAjax()
                 ->ajax([
-                'data' => "function(data) { formatDataDataTables($('#formFiltersDatatables').serializeArray(), data);   }"
+                    'data' => "function(data) { formatDataDataTables($('#formFiltersDatatables').serializeArray(), data);   }"
                 ])
                 ->info(true)
                 ->language(['url' => asset('js/SpanishDataTables.json')])

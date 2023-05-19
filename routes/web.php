@@ -74,6 +74,7 @@ Route::group(['prefix' => 'admin','middleware' => ['role:Admin|Superadmin|Develo
     Route::resource('tipoequipos', TipoEquipoController::class);
     Route::resource('clientes', ClienteController::class);
     Route::resource('servicios', ServicioController::class);
+    Route::get('buscador', [ClienteController::class,'buscador'])->name('buscador');
 
 });
 

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\DataTables\Scopes\ScopeClienteDataTable;
 use App\DataTables\ClienteDataTable;
 use App\Http\Requests\CreateClienteRequest;
 use App\Http\Requests\UpdateClienteRequest;
@@ -24,10 +24,56 @@ class ClienteController extends AppBaseController
      */
     public function index(ClienteDataTable $clienteDataTable)
     {
-    return $clienteDataTable->render('clientes.index');
+
+        $scope = new ScopeClienteDataTable();
+        $clienteDataTable->addScope($scope);
+
+        return $clienteDataTable->render('clientes.index');
     }
 
+    public function buscador(Request $request)
+        {
+            ini_set('memory_limit', -1);
+            $request->flash();
+            $showResult = false;
+            $clientes = [];
 
+            $campos['nombres'] = $request->input('nombres');
+            $campos['apellidos'] = $request->input('apellidos');
+            // $campos['dpi'] = $request->input('dpi');
+            // $campos['telefono'] = $request->input('telefono');
+            // $campos['direccion'] = $request->input('direccion');
+            // $campos['correo'] = $request->input('correo');
+
+            $camposCheck = $campos;
+
+            foreach ($camposCheck as $key => $value) {
+                if (empty($value)) {
+                    unset($camposCheck[$key]);
+                }
+            }
+
+            if(!empty($camposCheck)) {
+
+                $showResult = true;
+
+                $clientes = Cliente::nombres($campos['nombres'])
+                ->apellidos($campos['apellidos'])
+                // ->where('apellidos', $campos['apellidos'])
+                // ->where('dpi', $campos['dpi'])
+                // ->where('telefono', $campos['telefono'])
+                // ->where('direccion', $campos['direccion'])
+                // ->where('correo', $campos['correo'])
+                ->get();
+
+                //@dd($clientes);
+
+     }
+
+
+    return view('clientes.buscador',compact('clientes', 'showResult'));
+
+        }
     /**
      * Show the form for creating a new Cliente.
      */

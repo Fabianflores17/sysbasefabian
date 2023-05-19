@@ -50,6 +50,31 @@ class Cliente extends Model
 
     public function servicio(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(\App\Models\Servicio::class, 'cliente_id', 'id');
+        return $this->hasMany(\App\Models\Servicio::class, 'cliente_id');
     }
+
+    // public function scopenombres($query, $nombres)
+    // {
+    //     // if ($nombres=null)
+    //     // return $query->where('nombres', $nombres);
+    //     if ($nombres){
+    //         $query->whereHas('nombres', function($q){
+
+    //         $q->wherenombre($this->nombres);
+    //     });
+    //     }
+    // }
+
+    // public function scopenombres($query, $nombres)
+    // {
+
+    //     if (isset($nombres)) return $query->where('nombres', $nombres);
+
+    // }
+    // public function scopeapellidos($query, $apellidos)
+    // {
+
+    //     if (isset($apellidos)) return $query->where('apellidos', $apellidos);
+
+    // }
 }

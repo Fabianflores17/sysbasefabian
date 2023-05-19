@@ -28,7 +28,14 @@
 
     <div class="content">
         <div class="container-fluid">
+
             <div class="clearfix"></div>
+
+            <div class="box box-primary">
+                <div class="box-body">
+                    @include('clientes.form_filters')
+                </div>
+            </div>
 
             <div class="clearfix"></div>
             <div class="card card-primary">
