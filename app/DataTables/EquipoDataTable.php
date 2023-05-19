@@ -30,7 +30,7 @@ class EquipoDataTable extends DataTable
 
             })
             ->rawColumns(['action'])
-            ->editColumn('tipo_id', function(Equipo $equipo){
+            ->editColumn('tipo.nombre', function(Equipo $equipo){
               return $equipo->tipo->nombre ?? null;
             });
     }
@@ -43,13 +43,11 @@ class EquipoDataTable extends DataTable
      */
     public function query(Equipo $model)
     {
-        return $model->newQuery()
-        ->with(['tipo:id,nombre'])
-        ->whereIn('tipo_id',function ($q){
-            $q->select('id')->from('soporte_equipo_tipos')->whereNull('deleted_at');
-            })
-
-            ;
+        return $model->newQuery()->select($model->getTable().'.*')
+        ->with(['tipo:id,nombre']);
+        // ->whereIn('tipo_id',function ($q){
+        //     $q->select('id')->from('soporte_equipo_tipos')->whereNull('deleted_at');
+        //     });
         //return $model->newQuery()->select($model->getTable().'.*');
     }
 

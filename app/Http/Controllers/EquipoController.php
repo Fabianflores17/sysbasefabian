@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\DataTables\Scopes\ScopeEquipoDataTable;
 use App\DataTables\EquipoDataTable;
 use App\Http\Requests\CreateEquipoRequest;
 use App\Http\Requests\UpdateEquipoRequest;
@@ -24,6 +24,10 @@ class EquipoController extends AppBaseController
      */
     public function index(EquipoDataTable $equipoDataTable)
     {
+        $scope = new ScopeEquipoDataTable();
+        $equipoDataTable->addScope($scope);
+
+
     return $equipoDataTable->render('equipos.index');
     }
 

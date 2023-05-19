@@ -1,17 +1,11 @@
-<!-- Tipo Id Field -->
+
 <!-- Tipo Equipo Id Field -->
 <div class="form-group col-sm-6" id="root">
-
     <label for="tipoequipo">Tipo </label>
-
     <multiselect v-model="tipoequipo" :options="tipoequipos" label="nombre" placeholder="Selecciones uno" >
-
     </multiselect>
-
     <input type="hidden" name="tipo_id" id="tipo_id" :value="tipoId">
-
     <input type="hidden" name="tipo_name" id="tipo_name" :value="tipoName">
-
   </div>
 
 <!-- Numero Serie Field -->
