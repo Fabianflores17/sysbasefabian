@@ -46,9 +46,18 @@ class EquipoController extends AppBaseController
     public function store(CreateEquipoRequest $request)
     {
         $input = $request->all();
-
+    $nuevo  = Equipo::all();
         /** @var Equipo $equipo */
-        $equipo = Equipo::create($input);
+        $equipo =Equipo::create($input);
+//        if ($request->hasFile('imagen')) {
+//            $imagen = $request->file('imagen');
+//            $equipo->addMedia($imagen)->toMediaCollection('imagenes');
+//        }
+
+        if ($request->hasFile('imagen')){
+            $equipo->addMediaFromRequest('imagen')->toMediaCollection('fotoEquipo');
+        }
+
 
         flash()->success('Equipo guardado.');
 
@@ -105,6 +114,9 @@ class EquipoController extends AppBaseController
 
         $equipo->fill($request->all());
         $equipo->save();
+        if ($request->hasFile('imagen')){
+            $equipo->addMediaFromRequest('imagen')->toMediaCollection('fotoEquipo');
+        }
 
         flash()->success('Equipo actualizado.');
 

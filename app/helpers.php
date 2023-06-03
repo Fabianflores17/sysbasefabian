@@ -335,7 +335,7 @@ function generarManifest()
 
         foreach ($media->getMediaConversionNames() as $index => $conversionName) {
 
-            $pathIcon = "storage/".$media->id."/conversions/".$media->name."-".$conversionName.".".$media->getExtensionAttribute();
+            $pathIcon = "storage/".$media->id."/conversions/".$media->name."-".$conversionName.".".$media;
 
             $new = [
                 "src" => $pathIcon,

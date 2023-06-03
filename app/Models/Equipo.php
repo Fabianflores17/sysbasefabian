@@ -3,12 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
- use Illuminate\Database\Eloquent\SoftDeletes;
- use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Equipo extends Model
+/**
+ * @property string thumb
+ * @property string img
+ */
+class Equipo extends Model implements HasMedia
 {
-
+    Use InteractsWithMedia;
     use SoftDeletes;
     use HasFactory;
 
@@ -36,11 +43,27 @@ class Equipo extends Model
         'updated_at' => 'nullable',
         'deleted_at' => 'nullable'
     ];
-
+    public function getImgAttribute()
+    {
+        $media = $this->getMedia('avatars')->last();
+        return $media ? $media->getUrl() : '';
+    }
     public static $messages = [
 
     ];
 
+    public function registerMediaConversions(Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(250)
+            ->height(250);
+    }
+
+    public function getThumbAttribute()
+    {
+        $media = $this->getMedia('fotoEquipo')->last();
+        return $media ? $media->getUrl('thumb') : '';
+    }
     public function tipo(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(\App\Models\TipoEquipo::class, 'tipo_id');

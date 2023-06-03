@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Equipo;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Services\DataTable;
@@ -24,15 +25,21 @@ class EquipoDataTable extends DataTable
                 $id = $equipo->id;
                 return view('equipos.datatables_actions',compact('equipo','id'));
             })
+
             ->editColumn('id',function (Equipo $equipo){
 
                 return $equipo->id;
 
             })
-            ->rawColumns(['action'])
+            ->editColumn('fotoEquipo',function (Equipo $equipo){
+
+                return "<img src='{$equipo->thumb}'>";
+            })
+            ->rawColumns(['action','fotoEquipo'])
             ->editColumn('tipo.nombre', function(Equipo $equipo){
               return $equipo->tipo->nombre ?? null;
-            });
+            })
+            ;
     }
 
     /**
@@ -41,10 +48,11 @@ class EquipoDataTable extends DataTable
      * @param \App\Models\Equipo $model
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function query(Equipo $model)
+    public function query(Equipo $model): QueryBuilder
     {
         return $model->newQuery()->select($model->getTable().'.*')
-        ->with(['tipo:id,nombre']);
+        ->with(['tipo:id,nombre'])
+        ->with(['media']);
         // ->whereIn('tipo_id',function ($q){
         //     $q->select('id')->from('soporte_equipo_tipos')->whereNull('deleted_at');
         //     });
@@ -119,6 +127,7 @@ class EquipoDataTable extends DataTable
             Column::make('numero_serie'),
             Column::make('imei'),
             Column::make('observaciones'),
+            Column::make('fotoEquipo'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

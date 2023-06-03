@@ -1,12 +1,14 @@
 
 <!-- Tipo Equipo Id Field -->
-<div class="form-group col-sm-6" id="root">
-    <label for="tipoequipo">Tipo </label>
-    <multiselect v-model="tipoequipo" :options="tipoequipos" label="nombre" placeholder="Selecciones uno" >
-    </multiselect>
-    <input type="hidden" name="tipo_id" id="tipo_id" :value="tipoId">
-    <input type="hidden" name="tipo_name" id="tipo_name" :value="tipoName">
-  </div>
+
+  <div class="form-group col-sm-6" id="root">
+      <label for="tipoequipo">Tipo </label>
+      <multiselect v-model="tipoequipo" :options="tipoequipos" label="nombre" placeholder="Selecciones uno" >
+      </multiselect>
+      <input type="hidden" name="tipo_id" id="tipo_id" :value="tipoId">
+      <input type="hidden" name="tipo_name" id="tipo_name" :value="tipoName">
+    </div>
+
 
 <!-- Numero Serie Field -->
 <div class="form-group col-sm-6">
@@ -24,6 +26,14 @@
 <div class="form-group col-sm-12 col-lg-12">
     {!! Form::label('observaciones', 'Observaciones:') !!}
     {!! Form::textarea('observaciones', null, ['class' => 'form-control', 'maxlength' => 65535, 'maxlength' => 65535, 'maxlength' => 65535]) !!}
+</div>
+
+<div class="form-group col-sm-6">
+    {!! Form::label('imagen', 'Foto Equipo:') !!}
+    <div class="custom-file">
+        <input type="file" name="imagen" id="imagen" class="custom-file-input" >
+        <label class="custom-file-label" for="exampleInputFile">{{__("Choose file")}}</label>
+    </div>
 </div>
 @push('scripts')
 

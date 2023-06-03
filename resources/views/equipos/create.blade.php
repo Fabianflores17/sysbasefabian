@@ -32,7 +32,7 @@
             <div class="card">
                 <div class="card-body">
 
-                    {!! Form::open(['route' => 'equipos.store','class' => 'esperar']) !!}
+                    {!! Form::open(['route' => 'equipos.store', "enctype"=>"multipart/form-data",'class' => 'wait-on-submit']) !!}
                     <div class="form-row">
 
                         @include('equipos.fields')
