@@ -20,7 +20,7 @@
 
 
              <!-- Cliente Id Field -->
-             <div class="form-group col-sm-4" >
+             <div class="form-group col-sm-3" >
                 <label for="tipocliente">Cliente </label>
                 <multiselect v-model="tipocliente" :options="tipoclientes"  track-by="id" label="nombres" :multiple="true" placeholder="Selecciones uno" >
                 </multiselect>

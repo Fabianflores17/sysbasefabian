@@ -20,7 +20,7 @@
     :labels="{checked: 'Si', unchecked: 'No'}"
     :height="30"
     :width="60"
-    :value="false"></toggle-button>
+    :value="activo ? 'si':'no'"></toggle-button>
 
     </div>
 
@@ -42,7 +42,7 @@ this.activoID
         },
 
     data: {
-    activo: @json(($tipoEquipo->activo ?? false)=='si' ? true : false),
+    activo: '',
 
     },
 computed: {

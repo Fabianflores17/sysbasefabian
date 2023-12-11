@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
  use Illuminate\Database\Eloquent\SoftDeletes;
  use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -50,4 +51,13 @@ class TipoEquipo extends Model
     public function getColorEstadoAttribute(){
         return $this->activo == 'si' ? 'badge-success' : 'badge-danger';
     }
+
+    protected function nombre(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => ucfirst($value),
+            set: fn ($value) => strtolower($value),
+        );
+    }
+
 }
