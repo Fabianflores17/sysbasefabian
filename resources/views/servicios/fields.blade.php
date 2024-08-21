@@ -10,6 +10,15 @@
 <!-- Cliente Id Field -->
 
 <div class="form-group col-sm-6">
+    <label for="tipocliente">TODO </label>
+    <multiselect v-model="tipocliente" :options="tipoclientes" label="nombres" placeholder="Selecciones uno">
+    </multiselect>
+    <input type="hidden" name="cliente_id" id="cliente_id" :value="clienteID">
+
+</div>
+
+
+<div class="form-group col-sm-6">
     <label for="tipocliente">Cliente </label>
     <multiselect v-model="tipocliente" :options="tipoclientes" label="nombres" placeholder="Selecciones uno">
     </multiselect>
@@ -30,8 +39,14 @@
 
 <!-- Problema Field -->
 <div class="form-group col-sm-12 col-lg-12">
-    {!! Form::label('problema', 'Problema:') !!}
-    {!! Form::textarea('problema', null, ['class' => 'form-control','rows' => 2, 'required']) !!}
+    {!! Form::label('problemaS', 'ProblemaS:') !!}
+    {!! Form::textarea('problemaS', null, ['class' => 'form-control','rows' => 2, 'required']) !!}
+</div>
+
+<!-- Problema Field -->
+<div class="form-group col-sm-12 col-lg-12">
+    {!! Form::label('problemaS', 'ProblemaS2:') !!}
+    {!! Form::textarea('problemaS2', null, ['class' => 'form-control','rows' => 2, 'required']) !!}
 </div>
 
 <!-- Solucion Field -->
@@ -52,26 +67,6 @@
     {!! Form::Date('fecha_recibido', $servicio->fecha_recibido ?? null, ['class' => 'form-control','id'=>'fecha_recibido']) !!}
 </div>
 
-
-<!-- Fecha Inicio Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('fecha_inicio', 'Fecha Inicio:') !!}
-    {!! Form::Date('fecha_inicio', $servicio->fecha_inicio ?? null, ['class' => 'form-control','id'=>'fecha_inicio']) !!}
-</div>
-
-
-<!-- Fecha Fin Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('fecha_fin', 'Fecha Fin:') !!}
-    {!! Form::Date('fecha_fin',$servicio->fecha_fin ?? null ,['class' => 'form-control','id'=>'fecha_fin']) !!}
-</div>
-
-
-<!-- Fecha Entrega Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('fecha_entrega', 'Fecha Entrega:') !!}
-    {!! Form::Date('fecha_entrega',$servicio->fecha_entrega ?? null, ['class' => 'form-control','id'=>'fecha_entrega']) !!}
-</div>
 
 @push('scripts')
 
