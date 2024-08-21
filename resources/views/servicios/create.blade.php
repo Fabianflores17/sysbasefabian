@@ -17,7 +17,7 @@
                        href="{{ route('servicios.index') }}"
                         >
                         <i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;
-                        <span class="d-none d-sm-inline">Regresar</span>
+                        <span class="d-none d-sm-inline">Regresar atras</span>
                     </a>
                 </div>
             </div>
